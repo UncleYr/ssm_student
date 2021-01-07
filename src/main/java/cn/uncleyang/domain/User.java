@@ -16,7 +16,41 @@ public class User implements Serializable {
     private String major;
     private String grade;
     private String tel;
-    private String course;
+    private List<Course> courses;
+    private Double score;
+
+    public User() {
+    }
+
+
+    public User(String id, String username, String password, String gender, String department, String major, String grade, String tel, List<Course> courses,Double score) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.gender = gender;
+        this.department = department;
+        this.major = major;
+        this.grade = grade;
+        this.tel = tel;
+        this.courses = courses;
+        this.score = score;
+    }
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
+
+    public List<Course> getCourses() {
+        return courses;
+    }
+
+    public void setCourses(List<Course> courses) {
+        this.courses = courses;
+    }
 
     public String getId() {
         return id;
@@ -82,13 +116,6 @@ public class User implements Serializable {
         this.tel = tel;
     }
 
-    public String getCourse() {
-        return course;
-    }
-
-    public void setCourse(String course) {
-        this.course = course;
-    }
 
     @Override
     public String toString() {
@@ -101,7 +128,8 @@ public class User implements Serializable {
                 ", major='" + major + '\'' +
                 ", grade='" + grade + '\'' +
                 ", tel='" + tel + '\'' +
-                ", course='" + course + '\'' +
+                ", courses=" + courses +
                 '}';
     }
 }
+

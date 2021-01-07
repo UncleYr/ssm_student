@@ -2,11 +2,11 @@
   Created by IntelliJ IDEA.
   User: 15181
   Date: 2020/12/2
-  Time: 14:51
+  Time: 15:26
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -14,7 +14,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>教师端</title>
+    <title>管理员端</title>
     <meta name="description" content="AdminLTE2定制版">
     <meta name="keywords" content="AdminLTE2定制版">
 
@@ -75,13 +75,119 @@
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
-    <jsp:include page="teacher-aside.jsp"></jsp:include>
+    <jsp:include page="admin-aside.jsp"></jsp:include>
     <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
+        <section class="content"> <!-- .box-body -->
+            <div class="box box-primary">
+                <div class="box-header with-border">
+                    <h3 class="box-title">列表</h3>
+                </div>
 
+                <div class="box-body">
+
+                    <!-- 数据表格 -->
+                    <div class="table-box">
+
+                        <!--工具栏-->
+                    <%--    <div class="pull-left">
+                            <div class="form-group form-inline">
+                                <div class="btn-group">
+
+                                    <button type="button" class="btn btn-default" href="#" title="添加">
+                                        <i &lt;%&ndash;class="fa fa-refresh"&ndash;%&gt;></i> 添加
+                                    </button>
+                                </div>
+                            </div>
+                        </div>--%>
+                        <div class="box-tools pull-right">
+                            <div class="has-feedback">
+                                <input type="text" class="form-control input-sm"
+                                       placeholder="搜索"> <span
+                                    class="glyphicon glyphicon-search form-control-feedback"></span>
+                            </div>
+                        </div>
+                        <!--工具栏/-->
+
+                        <!--数据列表-->
+                        <table id="dataList"
+                               class="table table-bordered table-striped table-hover dataTable">
+                            <thead>
+                            <tr>
+                                <th class="" style="padding-right: 0px"><input
+                                        id="selall" type="checkbox" class="icheckbox_square-blue">
+                                </th>
+                                <th class="sorting_asc">课程名</th>
+                                <th class="sorting_desc">授课老师</th>
+                                <th class="sorting_asc sorting_asc_disabled">时间</th>
+                                <th class="sorting_desc sorting_desc_disabled">地点</th>
+                                <th class="sorting_desc sorting_desc_disabled">总人数</th>
+                                <th class="sorting_desc sorting_desc_disabled">剩余人数</th>
+                                <%-- <th class="sorting">具有角色</th>
+                                 <th class="sorting">操作</th>--%>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <c:forEach items="${requestScope.courses}" var="course">
+                                <tr>
+                                    <td><input name="ids" type="checkbox"></td>
+                                    <td>${course.courseName}</td>
+                                    <td>${course.teacher}</td>
+                                    <td>${course.time}</td>
+                                    <td>${course.place}</td>
+                                    <td>${course.count}</td>
+                                    <td>${course.remainCount}</td>
+                                        <%--  <td class="text-center">
+                                              <c:forEach items="${requestScope.courses}" var="course1">
+                                                  &nbsp;&nbsp;${course1.courseName}
+                                              </c:forEach>
+                                          </td>--%>
+                                    <td class="text-center">
+                                    <a href="${pageContext.request.contextPath}/#"  class="btn bg-olive btn-xs">修改</a>
+                                </td>
+                                    <%--<td class="text-center">
+                                        <a href="${pageContext.request.contextPath}/#"  class="btn bg-olive btn-xs">课程</a>
+                                    </td>--%>
+                                    <td class="text-center">
+                                        <a href="${pageContext.request.contextPath}/admin/student/delete?id=${user.id}"  class="btn bg-olive btn-xs">删除</a>
+                                    </td>
+                                </tr>
+                            </c:forEach>
+
+
+
+                            </tbody>
+
+                        </table>
+                        <!--数据列表/-->
+
+                    </div>
+                    <!-- 数据表格 /-->
+
+                </div>
+                <!-- /.box-body -->
+
+            </div>
+
+        </section>
+
+       <%-- <div class="box-tools pull-right">
+            <ul class="pagination">
+                <li><a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum-1}&size=${requestScope.users.pageSize}">首页</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/student?page=1&size=${requestScope.users.pageSize}">上一页</a></li>
+                <c:forEach begin="1" end="${requestScope.users.pages}" var="pageNum">
+                    <li><a href="${pageContext.request.contextPath}/admin/student?page=${pageNum}&size=${requestScope.users.pageSize}">${pageNum}</a></li>
+                </c:forEach>
+                <li><a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum+1}&size=${requestScope.users.pageSize}">下一页</a></li>
+                <li><a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pages}&size=${requestScope.users.pageSize}">尾页</a></li>
+            </ul>
+
+        </div>--%>
     </div>
+
+
     <!-- 内容区域 /-->
 
     <!-- 底部导航 -->
@@ -188,6 +294,11 @@
         $(".textarea").wysihtml5({
             locale : 'zh-CN'
         });
+        function delUser(userId) {
+            if (confirm("您确定要删除吗？")){
+                location.href="${pageContext.request.contextPath}/admin/del/"+userId;
+            }
+        }
     });
 
     // 设置激活菜单

@@ -72,132 +72,17 @@
 
     <!-- 页面头部 -->
     <%--<jsp:include page="header.jsp"></jsp:include>--%>
-    <header class="main-header">
-        <!-- Logo -->
-        <a href="all-admin-index.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
-            <span class="logo-mini"><b>学生</b></span> <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>学生</b>页面</span>
-        </a>
-        <nav class="navbar navbar-static-top">
-            <a href="#" class="sidebar-toggle" data-toggle="offcanvas"
-               role="button"> <span class="sr-only">Toggle navigation</span>
-            </a>
-            <div class="navbar-custom-menu">
-                <ul class="nav navbar-nav">
-                    <li class="dropdown user user-menu"><a href="#"
-                                                           class="dropdown-toggle" data-toggle="dropdown">
-                        <%--<img src="${pageContext.request.contextPath}/img/user2-160x160.jpg"
-                            class="user-image" alt="User Image"> <span class="hidden-xs">--%>
-                        <security:authentication property="principal.username"/>
-                        </span>
-
-                    </a>
-                        <!-- User image -->
-                        <%-- <li class="user-header"><img
-                                 src="${pageContext.request.contextPath}/img/user2-160x160.jpg"
-                                 class="img-circle" alt="User Image"></li>--%>
-
-                        <!-- Menu Footer-->
-                    <li class="user-footer">
-                        <div class="pull-left">
-                            <a href="#" class="btn btn-default btn-flat"
-                               id="updatePswdLink">修改密码</a>
-                        </div>
-                        <div class="pull-right">
-                            <a href="${pageContext.request.contextPath}/user/logout"
-                               class="btn btn-default btn-flat"
-                            >注销</a>
-                        </div>
-                    </li>
-                    <form action="${pageContext.request.contextPath}/user/updatePassword" METHOD="post">
-                        <div id="updatePswd" style="display: none;background-color: rgba(255,200,100,0.9);
-	                    padding: 5px;
-	                    position: absolute;
-	                    top: 200px;
-	                    left: 200px;
-	                    width: 500px;
-	                    height: 280px;">
-                            <div style="position: relative;display:table;margin: auto;">
-                                <div style="margin-top:20px ">原密码<input type="text" name="oldpswd" style="width: 300px;height: 30px;outline: none;"></div>
-                                <div style="margin-top:20px ">新密码<input type="password" name="newpswd" style="width: 300px;height: 30px;outline: none"></div>
-                                <div style="margin-top:20px ">确认密码<input type="password" name="newpswd1" style="width: 300px;height: 30px;outline: none"></div>
-                                <div style="margin-top:20px;position: relative;left:50px;"><input type="submit" style="width: 200px;height: 30px;outline: none" value="确定"></div>
-                            </div>
-                        </div>
-                    </form>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
+    <jsp:include page="stu-head.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
 <%--    <jsp:include page="aside.jsp"></jsp:include>--%>
-    <aside class="main-sidebar">
-        <section class="sidebar">
-            <div class="user-panel">
-                <div class="pull-left info">
-                    <p>
-                        <security:authentication property="principal.username" />
-                    </p>
-                </div>
-            </div>
-            <ul class="sidebar-menu">
-                <li class="header">菜单</li>
-                <li id="admin-index"><a
-                        href="${pageContext.request.contextPath}/pages/stuMain.jsp"><i
-                        class="fa fa-dashboard"></i> <span>首页</span></a></li>
-
-                <li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-                    <span>个人信息管理</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-
-
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/stu-info.jsp"> <i
-                                class="fa fa-circle-o"></i> 个人信息
-                        </a></li>
-                       <%-- <li><a
-                                href="${pageContext.request.contextPath}/role/list"> <i
-                                class="fa fa-circle-o"></i> 角色管理
-                        </a></li>--%>
-                       <%-- <li><a
-                                href="${pageContext.request.contextPath}/pages/syslog-list.jsp"> <i
-                                class="fa fa-circle-o"></i> 访问日志
-                        </a></li>--%>
-                    </ul></li>
-                <li class="treeview"><a href="#"> <i class="fa fa-cube"></i>
-                    <span>选课</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/stu-course.jsp">
-                            <i class="fa fa-circle-o"></i> 公选课
-                        </a></li>
-                        <li><a
-                                href="#">
-                            <i class="fa fa-circle-o"></i> 专选课
-                        </a></li>
-
-                    </ul></li>
-
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
+    <jsp:include page="stu-aside.jsp"></jsp:include>
         <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
-        <h1>${requestScope.msg}</h1>
+        <h1>${empty requestScope.msg ? "选课成功！":requestScope.msg}</h1>
     </div>
     <!-- 内容区域 /-->
 

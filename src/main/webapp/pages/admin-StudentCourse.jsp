@@ -8,7 +8,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -75,37 +74,25 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="stu-head.jsp"></jsp:include>
+    <jsp:include page="admin-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
-    <jsp:include page="stu-aside.jsp"></jsp:include>
+    <jsp:include page="admin-aside.jsp"></jsp:include>
     <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
 
         <!-- 内容头部 -->
-        <section class="content-header">
-            <h1>
-                选课 <small>${sessionScope.user.username}</small>
-            </h1>
-            <ol class="breadcrumb">
-                <li><a href="${pageContext.request.contextPath}/pages/stuMain.jsp"><i
-                        class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
 
-                <li class="active">${sessionScope.user.username}</li>
-            </ol>
-        </section>
         <!-- 内容头部 /-->
 
         <!-- 正文区域 -->
         <section class="content"> <!-- .box-body -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">列表</h3>
+                    <h2 class="box-title">${requestScope.user.username}已选课程</h2>
                 </div>
 
                 <div class="box-body">
@@ -114,22 +101,7 @@
                     <div class="table-box">
 
                         <!--工具栏-->
-                        <div class="pull-left">
-                            <div class="form-group form-inline">
-                                <div class="btn-group">
 
-                                    <button type="button" class="btn btn-default" href="${pageContext.request.contextPath}/user/showCourse" title="刷新">
-                                        <i class="fa fa-refresh"></i> 刷新
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-tools pull-right">
-                            <div class="has-feedback">
-                                <input type="text" class="form-control input-sm"
-                                       placeholder="搜索" id="search"> <span class="glyphicon glyphicon-search form-control-feedback"></span>
-                            </div>
-                        </div>
                         <!--工具栏/-->
 
                         <!--数据列表-->
@@ -140,13 +112,12 @@
                                 <th class="" style="padding-right: 0px"><input
                                         id="selall" type="checkbox" class="icheckbox_square-blue">
                                 </th>
-                                <th class="sorting_asc">ID</th>
+
                                 <th class="sorting_desc">课程名</th>
                                 <th class="sorting_asc sorting_asc_disabled">老师</th>
                                 <th class="sorting_desc sorting_desc_disabled">上课时间</th>
                                 <th class="sorting_desc sorting_desc_disabled">地点</th>
-                                <th class="sorting_desc sorting_desc_disabled">人数</th>
-                                <th class="sorting_desc sorting_desc_disabled">剩余人数</th>
+
                                <%-- <th class="sorting">具有角色</th>
                                 <th class="sorting">操作</th>--%>
                             </tr>
@@ -155,21 +126,17 @@
                             <c:forEach items="${requestScope.courses}" var="course">
                                 <tr>
                                     <td><input name="ids" type="checkbox"></td>
-                                    <td>${course.id}</td>
+
                                     <td>${course.courseName}</td>
                                     <td>${course.teacher}</td>
-                                    <td><fmt:formatDate value="${course.time}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
+                                    <td>${course.time}</td>
                                     <td>${course.place}</td>
-                                    <td>${course.count}</td>
-                                    <td>${course.remainCount}</td>
+
                                   <%--  <td class="text-center">
                                         <c:forEach items="${requestScope.courses}" var="course1">
                                             &nbsp;&nbsp;${course1.courseName}
                                         </c:forEach>
                                     </td>--%>
-                                    <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/user/addCourse?courseId=${course.id}"  class="btn bg-olive btn-xs">确定</a>
-                                    </td>
                                 </tr>
                             </c:forEach>
 
@@ -202,7 +169,7 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.8
         </div>
-        <strong>Copyright &copy; 2018-2020 <a
+        <strong>Copyright &copy; 2018-2020
             <a href="https://www.nsu.edu.cn/" target="_blank">东软首页</a>.
         </strong> All rights reserved. </footer>
     <!-- 底部导航 /-->
@@ -259,14 +226,6 @@
 <script src="../plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <script>
     $(document).ready(function() {
-
-        //异步搜索
-        $("#search").onchange(function () {
-
-            //获取数据
-            let value = this.value();
-            $.getJSON("${pageContext.request.contextPath}/user","action=ajaxSearch",callback);
-        });
         // 选择框
         $(".select2").select2();
 

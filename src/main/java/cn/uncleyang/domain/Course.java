@@ -1,7 +1,16 @@
 package cn.uncleyang.domain;
 
+import cn.uncleyang.tuils.DateUtils;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import net.sf.jsqlparser.expression.DateTimeLiteralExpression;
+import org.springframework.format.annotation.DateTimeFormat;
+import sun.util.calendar.BaseCalendar;
+
+
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author yr
@@ -11,10 +20,30 @@ public class Course implements Serializable {
     private Integer id;
     private String courseName;
     private String teacher;
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private Date time;
     private String place;
     private Integer count;
     private Integer remainCount;
+    private List<User> users;
+
+
+
+    public Course() {
+    }
+
+
+    public Course(Integer id, String courseName, String teacher, Date time, String place, Integer count, Integer remainCount, List<User> users) {
+        this.id = id;
+        this.courseName = courseName;
+        this.teacher = teacher;
+        this.time = time;
+        this.place = place;
+        this.count = count;
+        this.remainCount = remainCount;
+        this.users = users;
+    }
 
     public Integer getId() {
         return id;
@@ -72,6 +101,14 @@ public class Course implements Serializable {
         this.remainCount = remainCount;
     }
 
+    public List<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<User> users) {
+        this.users = users;
+    }
+
     @Override
     public String toString() {
         return "Course{" +
@@ -82,6 +119,7 @@ public class Course implements Serializable {
                 ", place='" + place + '\'' +
                 ", count=" + count +
                 ", remainCount=" + remainCount +
+                ", users=" + users +
                 '}';
     }
 }

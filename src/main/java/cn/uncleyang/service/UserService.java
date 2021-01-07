@@ -3,7 +3,9 @@ package cn.uncleyang.service;
 import cn.uncleyang.dao.CourseDao;
 import cn.uncleyang.dao.UserDao;
 import cn.uncleyang.domain.Course;
+import cn.uncleyang.domain.StudentCourse;
 import cn.uncleyang.domain.User;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ public class UserService {
     private UserDao userDao;
     @Autowired
     private CourseDao courseDao;
+    @Autowired
+    private CourseService courseService;
     /**
      * 登陆验证
      * @param id
@@ -38,7 +42,50 @@ public class UserService {
         return courseDao.findAllCourse();
     }
 
-    public void addCourse(String id, String courseName) {
-        userDao.addCourse(id,courseName);
+    public int addCourse(String uid, int cid) {
+        Course course=courseService.findById(cid);
+        if (course.getRemainCount()==0){
+            return 0;
+        }
+        else {
+            StudentCourse studentCourse = userDao.checkRepeat(uid, cid);
+            if(studentCourse==null){
+
+                course.setRemainCount(course.getRemainCount()-1);
+                userDao.addCourse(uid,cid);
+                userDao.addCourseIntoScore(uid,cid);
+                courseDao.updateCourse(course);
+                return 1;
+            }
+            else {
+                return -1;
+            }
+        }
+    }
+
+    public List<User>  showUsers(int page, int size){
+        PageHelper.startPage(page,10);
+         return userDao.findAll();
+    }
+
+    public int addUser(User user) {
+        return userDao.addUser(user);
+    }
+
+    public void deleteUserById(String id) {
+         userDao.deleteUserCourseByUid(id);
+        userDao.deleteUserById(id);
+    }
+
+    public void updateUser(User user) {
+         userDao.updateUser(user);
+    }
+
+    public List<Course> findCourse(String id) {
+        return userDao.findCourse(id);
+    }
+
+    public User findUserById(String id) {
+        return userDao.findUserById(id);
     }
 }

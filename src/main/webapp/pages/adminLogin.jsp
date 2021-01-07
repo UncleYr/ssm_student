@@ -31,9 +31,9 @@
 		</div>
 		<!-- /.login-logo -->
 		<div class="login-box-body">
-			<p class="login-box-msg">管理员后台登录系统</p>
+			<p class="login-box-msg">${empty requestScope.msg ? "管理员系统" :requestScope.msg}</p>
 
-			<form action="${pageContext.request.contextPath}/pages/adminMain.jsp"
+			<form action="${pageContext.request.contextPath}/admin/findAdminByIdAndPassword"
 				method="post">
 				<div class="form-group has-feedback">
 					<input type="text" name="username" class="form-control"

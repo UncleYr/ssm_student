@@ -68,10 +68,10 @@
 	<div class="wrapper">
 
 		<!-- 页面头部 -->
-		<jsp:include page="header.jsp"></jsp:include>
+		<jsp:include page="admin-header.jsp"></jsp:include>
 		<!-- 页面头部 /-->
 		<!-- 导航侧栏 -->
-		<jsp:include page="aside.jsp"></jsp:include>
+		<jsp:include page="admin-aside.jsp"></jsp:include>
 		<!-- 导航侧栏 /-->
 
 		<!-- 内容区域 -->
@@ -80,7 +80,7 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				用户管理 <small>用户表单</small>
+				学生管理 <small>学生表单</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
@@ -92,41 +92,61 @@
 			</section>
 			<!-- 内容头部 /-->
 
-			<form action="${pageContext.request.contextPath}/user/save"
+			<form action="${pageContext.request.contextPath}/admin/student/save"
 				method="post">
 				<!-- 正文区域 -->
 				<section class="content"> <!--产品信息-->
 
 				<div class="panel panel-default">
-					<div class="panel-heading">用户信息</div>
+					<div class="panel-heading">888</div>
 					<div class="row data-type">
 
-						<div class="col-md-2 title">用户名称</div>
+						<div class="col-md-2 title">学号</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="id"
+								placeholder="${requestScope.user.id}" value="${requestScope.user.id}">
+						</div>
+						<div class="col-md-2 title">姓名</div>
 						<div class="col-md-4 data">
 							<input type="text" class="form-control" name="username"
-								placeholder="用户名称" value="">
+								placeholder="${requestScope.user.username}" value="${requestScope.user.username}">
 						</div>
 						<div class="col-md-2 title">密码</div>
 						<div class="col-md-4 data">
 							<input type="password" class="form-control" name="password"
-								placeholder="密码" value="">
+								placeholder="${requestScope.user.password}" value="${requestScope.user.password}">
 						</div>
-						<div class="col-md-2 title">邮箱</div>
+						<div class="col-md-2 title">性别</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="email"
-								placeholder="邮箱" value="">
+							<input type="text" class="form-control" name="gender"
+								placeholder="${requestScope.user.gender}" value="${requestScope.user.gender}">
 						</div>
-						<div class="col-md-2 title">联系电话</div>
+						<div class="col-md-2 title">年纪</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="phoneNum"
-								placeholder="联系电话" value="">
+							<input type="text" class="form-control" name="grade"
+								   placeholder="${requestScope.user.grade}" value="${requestScope.user.grade}">
 						</div>
-						<div class="col-md-2 title">用户角色</div>
+						<div class="col-md-2 title">系别</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="department"
+								   placeholder="${requestScope.user.department}" value="${requestScope.user.department}">
+						</div>
+						<div class="col-md-2 title">专业</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="major"
+								   placeholder="${requestScope.user.major}" value="${requestScope.user.major}">
+						</div>
+						<div class="col-md-2 title">电话</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="tel"
+								   placeholder="${requestScope.user.tel}" value="${requestScope.user.tel}">
+						</div>
+					<%--	<div class="col-md-2 title">用户角色</div>
 						<div class="col-md-10 data">
 							<c:forEach items="${roleList}" var="role">
 								<input class="" type="checkbox" name="roleIds" value="${role.id}">${role.roleName}
 							</c:forEach>
-						</div>
+						</div>--%>
 
 					</div>
 				</div>

@@ -33,11 +33,11 @@
 		<div class="login-box-body">
 			<p class="login-box-msg">老师登陆</p>
 
-			<form action="${pageContext.request.contextPath}/pages/teacherMain.jsp"
+			<form action="${pageContext.request.contextPath}/teacher/findTeacherByIdAndPassword"
 				method="post">
 				<div class="form-group has-feedback">
-					<input type="text" name="username" class="form-control"
-						placeholder="学号"> <span
+					<input type="text" name="name" class="form-control"
+						placeholder="姓名"> <span
 						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">

@@ -2,7 +2,7 @@
   Created by IntelliJ IDEA.
   User: 15181
   Date: 2020/12/2
-  Time: 14:36
+  Time: 15:09
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -16,7 +16,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <title>数据 - AdminLTE2定制版</title>
+    <title>课程管理</title>
     <meta name="description" content="AdminLTE2定制版">
     <meta name="keywords" content="AdminLTE2定制版">
 
@@ -68,6 +68,14 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
 
+    <script>
+        function delCourse(){
+            if(confirm("您确认要删除吗")){
+                return true;
+            }
+        }
+    </script>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -75,11 +83,11 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="stu-head.jsp"></jsp:include>
+    <jsp:include page="admin-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
-    <jsp:include page="stu-aside.jsp"></jsp:include>
+    <jsp:include page="teacher-aside.jsp"></jsp:include>
     <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
@@ -88,15 +96,15 @@
         <!-- 内容头部 -->
         <section class="content-header">
             <h1>
-                选课 <small>${sessionScope.user.username}</small>
+                课程管理 <small>课程</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="${pageContext.request.contextPath}/pages/stuMain.jsp"><i
+                <li><a href="${pageContext.request.contextPath}/pages/teacherMain.jsp"><i
                         class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
+                        href="${pageContext.request.contextPath}/user/findAll.do">课程管理</a></li>
 
-                <li class="active">${sessionScope.user.username}</li>
+                <li class="active">课程</li>
             </ol>
         </section>
         <!-- 内容头部 /-->
@@ -105,7 +113,7 @@
         <section class="content"> <!-- .box-body -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">列表</h3>
+                    <h3 class="box-title">${requestScope.msg}</h3>
                 </div>
 
                 <div class="box-body">
@@ -117,17 +125,18 @@
                         <div class="pull-left">
                             <div class="form-group form-inline">
                                 <div class="btn-group">
-
-                                    <button type="button" class="btn btn-default" href="${pageContext.request.contextPath}/user/showCourse" title="刷新">
-                                        <i class="fa fa-refresh"></i> 刷新
+                                    <button type="button" class="btn btn-default" title="新建" onclick="location.href='${pageContext.request.contextPath}/teacher/addCourse'">
+                                        <i class="fa fa-file-o"></i> 添加
                                     </button>
+
                                 </div>
                             </div>
                         </div>
                         <div class="box-tools pull-right">
                             <div class="has-feedback">
                                 <input type="text" class="form-control input-sm"
-                                       placeholder="搜索" id="search"> <span class="glyphicon glyphicon-search form-control-feedback"></span>
+                                       placeholder="搜索"> <span
+                                    class="glyphicon glyphicon-search form-control-feedback"></span>
                             </div>
                         </div>
                         <!--工具栏/-->
@@ -140,37 +149,39 @@
                                 <th class="" style="padding-right: 0px"><input
                                         id="selall" type="checkbox" class="icheckbox_square-blue">
                                 </th>
-                                <th class="sorting_asc">ID</th>
-                                <th class="sorting_desc">课程名</th>
-                                <th class="sorting_asc sorting_asc_disabled">老师</th>
-                                <th class="sorting_desc sorting_desc_disabled">上课时间</th>
-                                <th class="sorting_desc sorting_desc_disabled">地点</th>
-                                <th class="sorting_desc sorting_desc_disabled">人数</th>
-                                <th class="sorting_desc sorting_desc_disabled">剩余人数</th>
-                               <%-- <th class="sorting">具有角色</th>
-                                <th class="sorting">操作</th>--%>
+                                <th class="sorting_asc">学号</th>
+                                <th class="sorting_desc">姓名</th>
+                                <th class="sorting_asc sorting_asc_disabled">专业</th>
+                                <th class="sorting_desc sorting_desc_disabled">年纪</th>
+                                <th class="sorting_desc sorting_desc_disabled">分数</th>
+
+                                <th class="sorting">操作</th>
                             </tr>
                             </thead>
+
                             <tbody>
-                            <c:forEach items="${requestScope.courses}" var="course">
+                            <c:forEach items="${requestScope.users}" var="user">
                                 <tr>
                                     <td><input name="ids" type="checkbox"></td>
-                                    <td>${course.id}</td>
-                                    <td>${course.courseName}</td>
-                                    <td>${course.teacher}</td>
-                                    <td><fmt:formatDate value="${course.time}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
-                                    <td>${course.place}</td>
-                                    <td>${course.count}</td>
-                                    <td>${course.remainCount}</td>
-                                  <%--  <td class="text-center">
-                                        <c:forEach items="${requestScope.courses}" var="course1">
-                                            &nbsp;&nbsp;${course1.courseName}
+                                    <td>${user.id}</td>
+                                    <td>${user.username}</td>
+                                    <td>${user.major}</td>
+                                    <td>${user.grade}</td>
+                                    <td>${user.score}</td>
+                                   <%-- <td class="text-center">
+                                        <c:forEach items="${user.roles}" var="role">
+                                            &nbsp;&nbsp;${role.roleName}
                                         </c:forEach>
                                     </td>--%>
                                     <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/user/addCourse?courseId=${course.id}"  class="btn bg-olive btn-xs">确定</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/deleteStudent?id=${user.id}" onclick="delCourse()" class="btn bg-olive btn-xs">删除</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/updateStudent?id=${user.id}" class="btn bg-olive btn-xs">修改</a>
+                                        <a href="#" class="btn bg-olive btn-xs"  id="score">打分</a>
                                     </td>
+
+
                                 </tr>
+
                             </c:forEach>
 
 
@@ -186,28 +197,62 @@
                 </div>
                 <!-- /.box-body -->
 
-
-
+                <%--弹出打分输入框--%>
+                <form action="${pageContext.request.contextPath}/teacher/saveScore" METHOD="post">
+                    <div id="updateScore" style="display: none;background-color: rgb(241,243,244);
+	                    padding: 5px;
+                            position: absolute;
+                            top: 200px;
+                            left: 400px;
+                            width: 500px;
+                            height: 280px;
+                            box-shadow:10px 10px 5px rgba(34,45,50,.5);
+                            border-radius: 10px">
+                        <div style="position: relative;margin: auto;">
+                            <table style="border-collapse:separate; border-spacing:20px; font-family: 'youyuan">
+                                <tr>
+                                    <td >学号:</td>
+                                    <td><input type="text" name="uid" value="" style="width: 300px;height: 30px;outline: none;"></td>
+                                </tr>
+                                <tr>
+                                    <td>课程编号:</td>
+                                    <td><input type="hidden" name="cid" value="" style="width: 300px;height: 30px;outline: none" ></td>
+                                </tr>
+                                <tr>
+                                    <td>分数:</td>
+                                    <td><input type="text" name="score" style="width: 300px;height: 30px;outline: none"></td>
+                                </tr>
+                            </table>
+                            <div style="margin-top:20px;position: relative;left:103px;"><input type="submit" style="width: 80px;height: 30px;outline: none" value="确定"></div>
+                        </div>
+                    </div>
+                </form>
             </div>
 
         </section>
         <!-- 正文区域 /-->
 
     </div>
+
+
     <!-- @@close -->
     <!-- 内容区域 /-->
-
     <!-- 底部导航 -->
     <footer class="main-footer">
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.8
         </div>
         <strong>Copyright &copy; 2018-2020 <a
-            <a href="https://www.nsu.edu.cn/" target="_blank">东软首页</a>.
+                href="http://www.itcast.cn">研究院研发部</a>.
         </strong> All rights reserved. </footer>
     <!-- 底部导航 /-->
 
 </div>
+
+
+
+
+
 
 <script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script src="../plugins/jQueryUI/jquery-ui.min.js"></script>
@@ -258,15 +303,11 @@
 <script src="../plugins/ionslider/ion.rangeSlider.min.js"></script>
 <script src="../plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <script>
+
+    $("#score").click(function () {
+        $("#updateScore").css("display", "block")
+    });
     $(document).ready(function() {
-
-        //异步搜索
-        $("#search").onchange(function () {
-
-            //获取数据
-            let value = this.value();
-            $.getJSON("${pageContext.request.contextPath}/user","action=ajaxSearch",callback);
-        });
         // 选择框
         $(".select2").select2();
 
@@ -285,9 +326,7 @@
         }
     }
 
-    $(document)
-        .ready(
-            function() {
+    $(document).ready(function() {
 
                 // 激活导航位置
                 setSidebarActive("admin-datalist");

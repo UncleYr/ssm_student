@@ -8,6 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -68,9 +69,9 @@
           href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
 
     <script>
-        function delUser(userId){
+        function delCourse(){
             if(confirm("您确认要删除吗")){
-                location.href="${pageContext.request.contextPath}/user/del/"+userId;
+                return true;
             }
         }
     </script>
@@ -82,78 +83,11 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="header.jsp"></jsp:include>
+    <jsp:include page="admin-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- Sidebar user panel -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="${pageContext.request.contextPath}/img/user2-160x160.jpg"
-                         class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p>
-                        <security:authentication property="principal.username" />
-                    </p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
-                </div>
-            </div>
-
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-                <li class="header">菜单</li>
-                <li id="admin-index"><a
-                        href="${pageContext.request.contextPath}/pages/teacherMain.jsp"><i
-                        class="fa fa-dashboard"></i> <span>首页</span></a></li>
-
-                <li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-                    <span>课程管理</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-
-
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/teacher-course.jsp"> <i
-                                class="fa fa-circle-o"></i> 查看已开设课程
-                        </a></li>
-                        <li><a
-                                href="${pageContext.request.contextPath}/role/list"> <i
-                                class="fa fa-circle-o"></i> 角色管理
-                        </a></li>
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/syslog-list.jsp"> <i
-                                class="fa fa-circle-o"></i> 访问日志
-                        </a></li>
-                    </ul></li>
-                <li class="treeview"><a href="#"> <i class="fa fa-cube"></i>
-                    <span>成绩管理</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="#">
-                            <i class="fa fa-circle-o"></i> 某课程1
-                        </a></li>
-                        <li><a
-                                href="#">
-                            <i class="fa fa-circle-o"></i> 某课程2
-                        </a></li>
-
-                    </ul></li>
-
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
+    <jsp:include page="teacher-aside.jsp"></jsp:include>
     <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
@@ -179,7 +113,7 @@
         <section class="content"> <!-- .box-body -->
             <div class="box box-primary">
                 <div class="box-header with-border">
-                    <h3 class="box-title">列表</h3>
+                    <h3 class="box-title">${requestScope.msg}</h3>
                 </div>
 
                 <div class="box-body">
@@ -191,13 +125,10 @@
                         <div class="pull-left">
                             <div class="form-group form-inline">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default" title="新建" onclick="location.href='${pageContext.request.contextPath}/user/saveUI'">
-                                        <i class="fa fa-file-o"></i> 新建
+                                    <button type="button" class="btn btn-default" title="新建" onclick="location.href='${pageContext.request.contextPath}/teacher/addCourse'">
+                                        <i class="fa fa-file-o"></i> 添加
                                     </button>
 
-                                    <button type="button" class="btn btn-default" title="刷新">
-                                        <i class="fa fa-refresh"></i> 刷新
-                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -218,29 +149,35 @@
                                 <th class="" style="padding-right: 0px"><input
                                         id="selall" type="checkbox" class="icheckbox_square-blue">
                                 </th>
-                                <th class="sorting_asc">ID</th>
-                                <th class="sorting_desc">用户名</th>
-                                <th class="sorting_asc sorting_asc_disabled">邮箱</th>
-                                <th class="sorting_desc sorting_desc_disabled">联系电话</th>
-                                <th class="sorting">具有角色</th>
+                                <th class="sorting_asc">课程名</th>
+                                <th class="sorting_desc">授课老师</th>
+                                <th class="sorting_asc sorting_asc_disabled">地点</th>
+                                <th class="sorting_desc sorting_desc_disabled">时间</th>
+                                <th class="sorting_desc sorting_desc_disabled">总人数</th>
+                                <th class="sorting_desc sorting_desc_disabled">剩余人数</th>
                                 <th class="sorting">操作</th>
                             </tr>
                             </thead>
+
                             <tbody>
-                            <c:forEach items="${userList}" var="user">
+                            <c:forEach items="${requestScope.courses}" var="course">
                                 <tr>
                                     <td><input name="ids" type="checkbox"></td>
-                                    <td>${user.id}</td>
-                                    <td>${user.username}</td>
-                                    <td>${user.email}</td>
-                                    <td>${user.phoneNum}</td>
-                                    <td class="text-center">
+                                    <td>${course.courseName}</td>
+                                    <td>${course.teacher}</td>
+                                    <td><fmt:formatDate value="${course.time}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
+                                    <td>${course.place}</td>
+                                    <td>${course.count}</td>
+                                    <td>${course.remainCount}</td>
+                                   <%-- <td class="text-center">
                                         <c:forEach items="${user.roles}" var="role">
                                             &nbsp;&nbsp;${role.roleName}
                                         </c:forEach>
-                                    </td>
+                                    </td>--%>
                                     <td class="text-center">
-                                        <a href="javascript:void(0);" onclick="delUser('${user.id}')" class="btn bg-olive btn-xs">删除</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/deleteCourse?id=${course.id}" onclick="delCourse()" class="btn bg-olive btn-xs">删除</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/updateCourse?id=${course.id}" class="btn bg-olive btn-xs">修改</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/student?id=${course.id}" class="btn bg-olive btn-xs">评分</a>
                                     </td>
                                 </tr>
                             </c:forEach>

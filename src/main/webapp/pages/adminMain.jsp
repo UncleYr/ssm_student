@@ -5,8 +5,8 @@
   Time: 15:26
   To change this template use File | Settings | File Templates.
 --%>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -71,83 +71,18 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="header.jsp"></jsp:include>
+    <jsp:include page="admin-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
-    <aside class="main-sidebar">
-        <!-- sidebar: style can be found in sidebar.less -->
-        <section class="sidebar">
-            <!-- Sidebar user panel -->
-            <div class="user-panel">
-                <div class="pull-left image">
-                    <img src="${pageContext.request.contextPath}/img/user2-160x160.jpg"
-                         class="img-circle" alt="User Image">
-                </div>
-                <div class="pull-left info">
-                    <p>
-                        <security:authentication property="principal.username" />
-                    </p>
-                    <a href="#"><i class="fa fa-circle text-success"></i> 在线</a>
-                </div>
-            </div>
-
-            <!-- sidebar menu: : style can be found in sidebar.less -->
-            <ul class="sidebar-menu">
-                <li class="header">菜单</li>
-                <li id="admin-index"><a
-                        href="${pageContext.request.contextPath}/pages/adminMain.jsp"><i
-                        class="fa fa-dashboard"></i> <span>首页</span></a></li>
-
-                <li class="treeview"><a href="#"> <i class="fa fa-cogs"></i>
-                    <span>教师管理</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-
-
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/teacher-course.jsp"> <i
-                                class="fa fa-circle-o"></i> 查看所有教师信息
-                        </a></li>
-                        <li><a
-                                href="${pageContext.request.contextPath}/role/list"> <i
-                                class="fa fa-circle-o"></i> 查看课程信息
-                        </a></li>
-                        <li><a
-                                href="${pageContext.request.contextPath}/pages/syslog-list.jsp"> <i
-                                class="fa fa-circle-o"></i> 访问日志
-                        </a></li>
-                    </ul></li>
-                <li class="treeview"><a href="#"> <i class="fa fa-cube"></i>
-                    <span>学生管理</span> <span class="pull-right-container"> <i
-                            class="fa fa-angle-left pull-right"></i>
-				</span>
-                </a>
-                    <ul class="treeview-menu">
-
-                        <li><a
-                                href="#">
-                            <i class="fa fa-circle-o"></i> 查看学生个人信息
-                        </a></li>
-                        <li><a
-                                href="#">
-                            <i class="fa fa-circle-o"></i>
-                        </a></li>
-
-                    </ul></li>
-
-            </ul>
-        </section>
-        <!-- /.sidebar -->
-    </aside>
+    <jsp:include page="admin-aside.jsp"></jsp:include>
     <!-- 导航侧栏 /-->
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
-
+        <h1>
+            ${requestScope.msg}
+        </h1>
     </div>
     <!-- 内容区域 /-->
 
@@ -246,7 +181,7 @@
         src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
 <script
         src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
-<script>
+<%--<script>
     $(document).ready(function() {
         // 选择框
         $(".select2").select2();
@@ -275,7 +210,7 @@
         // 激活导航位置
         setSidebarActive("admin-index");
     });
-</script>
+</script>--%>
 </body>
 
 </html>

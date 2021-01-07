@@ -7,7 +7,6 @@ import cn.uncleyang.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.ServletException;
@@ -108,8 +107,21 @@ public class UserController {
     @RequestMapping("showCourse")
     public String showCourse(HttpServletRequest request){
         List<Course> courses = userService.showCourses();
+
         request.setAttribute("courses",courses);
         return "stu-course";
+    }
+
+    /**
+     * 显示学生所选的课程
+     * @return
+     */
+    @RequestMapping("findCourse")
+    public String findCourse(HttpServletRequest request){
+        User user = (User) request.getSession().getAttribute("user");
+         List<Course>courses=userService.findCourse(user.getId());
+         request.setAttribute("courses",courses);
+        return "stu-showCourse";
     }
 
     /**
@@ -119,28 +131,23 @@ public class UserController {
      */
     @RequestMapping("addCourse")
     public String addCourse(HttpServletRequest request){
-        String courseName = request.getParameter("courseName");
-        String courseRemainCount = request.getParameter("courseRemainCount");
-        Integer remainCount = Integer.valueOf(courseRemainCount);
+
+        String courseId = request.getParameter("courseId");
         User user = (User) request.getSession().getAttribute("user");
-        if (user.getCourse()!=null){
-            request.setAttribute("msg","你已经选择课程不能再选了！");
+        int i = userService.addCourse(user.getId(), Integer.parseInt(courseId));
+        if (i==0){
+            request.setAttribute("msg","课程已选完，请选择其他课程！");
+            return "stuMain";
+        }
+        else if (i==-1){
+            request.setAttribute("msg","不要重复选课");
             return "stuMain";
         }
         else {
-            //可以直接在jsp页面判定不需要在后端检查
-            if (remainCount==0){
-                request.setAttribute("msg","课程已选完，请选择其他课程！");
-                return "stuMain";
-            }
-            else {
-                userService.addCourse(user.getId(),courseName);
-                user.setCourse(courseName);
-                courseService.updateRemainCount(courseName,remainCount-1);
-                request.setAttribute("msg","选课成功!");
-
-            }
+            //request.setAttribute("msg","选课成功!");   //重定向怎么带消息过去?session?
+            return "redirect:/pages/stuMain.jsp";
         }
-        return "redirect:stuMain";
     }
+
+
 }

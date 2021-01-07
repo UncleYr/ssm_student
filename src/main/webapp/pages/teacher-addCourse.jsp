@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -62,15 +63,15 @@
 	href="${pageContext.request.contextPath}/plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.css">
 </head>
 
-	<body class="hold-transition skin-purple sidebar-mini">
+<body class="hold-transition skin-purple sidebar-mini">
 
 	<div class="wrapper">
 
 		<!-- 页面头部 -->
-		<jsp:include page="header.jsp"></jsp:include>
+		<jsp:include page="admin-header.jsp"></jsp:include>
 		<!-- 页面头部 /-->
 		<!-- 导航侧栏 -->
-		<jsp:include page="aside.jsp"></jsp:include>
+		<jsp:include page="teacher-aside.jsp"></jsp:include>
 		<!-- 导航侧栏 /-->
 
 		<!-- 内容区域 -->
@@ -79,37 +80,59 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				角色管理 <small>角色表单</small>
+				课程管理 <small>添加课程</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
-				<li><a href="${pageContext.request.contextPath}/role/findAll.do">角色管理</a></li>
-				<li class="active">角色表单</li>
+				<li><a
+					href="${pageContext.request.contextPath}/user/findAll.do">课程管理</a></li>
+				<li class="active">添加课程</li>
 			</ol>
 			</section>
 			<!-- 内容头部 /-->
 
-			<form action="${pageContext.request.contextPath}/role/save"
+			<form action="${pageContext.request.contextPath}/teacher/saveCourse"
 				method="post">
 				<!-- 正文区域 -->
 				<section class="content"> <!--产品信息-->
 
 				<div class="panel panel-default">
-					<div class="panel-heading">角色信息</div>
+					<div class="panel-heading">${empty requestScope.msg? 课程 : requestScope.msg}</div>
 					<div class="row data-type">
 
-						<div class="col-md-2 title">角色名称</div>
+						<div class="col-md-2 title">课程名</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="roleName"
-								placeholder="角色名称" value="">
+							<input type="text" class="form-control" name="courseName"
+								placeholder="" value="">
 						</div>
-						<div class="col-md-2 title">角色描述</div>
+						<div class="col-md-2 title">授课老师</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="roleDesc"
-								placeholder="角色描述" value="">
+							<input type="text" class="form-control" name="teacher"
+								placeholder="" value="${sessionScope.teacher.name}">
 						</div>
-										
+						<div class="col-md-2 title">时间</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="time"
+								   placeholder="yyyy-MM-dd HH:mm:ss" value="">
+						</div>
+						<div class="col-md-2 title">地点</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="place"
+								   placeholder="" value="">
+						</div>
+						<div class="col-md-2 title">人数</div>
+						<div class="col-md-4 data">
+							<input type="text" class="form-control" name="count"
+								   placeholder="" value="">
+						</div>
+
+					<%--	<div class="col-md-2 title">用户角色</div>
+						<div class="col-md-10 data">
+							<c:forEach items="${roleList}" var="role">
+								<input class="" type="checkbox" name="roleIds" value="${role.id}">${role.roleName}
+							</c:forEach>
+						</div>--%>
 
 					</div>
 				</div>
@@ -243,9 +266,8 @@
 				liObj.addClass("active");
 			}
 		}
-
 	</script>
-	
+
 
 </body>
 
