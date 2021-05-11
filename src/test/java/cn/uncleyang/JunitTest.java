@@ -54,8 +54,8 @@ public class JunitTest {
 //        }
 //        int i = userDao.addUser(new User("520","good","good","g","good","good","good","good","good"));
 //        System.out.println(i);
-
-//        userDao.deleteUserById("520");
+        userDao.deleteUserCourseByUid("1111111");
+        userDao.deleteUserById("1111111");
        // userDao.addCourse("121212",2);
 //        List<Course> course = userDao.findCourse("111111");
 //        for (Course course1 : course) {
@@ -104,9 +104,9 @@ public class JunitTest {
     }
     @Test
     public void UserServiceTest(){
-        List<Course> courses = userService.showCourses();
-        for (Course cours : courses) {
-            System.out.println(cours);
-        }
+//        List<Course> courses = userService.showCourses();
+//        for (Course cours : courses) {
+//            System.out.println(cours);
+//        }
     }
 }

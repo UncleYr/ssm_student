@@ -69,9 +69,9 @@
           href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
 
     <script>
-        function delCourse(){
+        function delCourse(courseId){
             if(confirm("您确认要删除吗")){
-                return true;
+                location.href="${pageContext.request.contextPath}/teacher/deleteCourse?id="+courseId;
             }
         }
     </script>
@@ -83,7 +83,7 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="admin-header.jsp"></jsp:include>
+    <jsp:include page="teacher-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
@@ -101,10 +101,8 @@
             <ol class="breadcrumb">
                 <li><a href="${pageContext.request.contextPath}/pages/teacherMain.jsp"><i
                         class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">课程管理</a></li>
 
-                <li class="active">课程</li>
+                <li class="active">查看已开设课程</li>
             </ol>
         </section>
         <!-- 内容头部 /-->
@@ -133,11 +131,7 @@
                             </div>
                         </div>
                         <div class="box-tools pull-right">
-                            <div class="has-feedback">
-                                <input type="text" class="form-control input-sm"
-                                       placeholder="搜索"> <span
-                                    class="glyphicon glyphicon-search form-control-feedback"></span>
-                            </div>
+
                         </div>
                         <!--工具栏/-->
 
@@ -175,9 +169,9 @@
                                         </c:forEach>
                                     </td>--%>
                                     <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/teacher/deleteCourse?id=${course.id}" onclick="delCourse()" class="btn bg-olive btn-xs">删除</a>
+                                        <a onclick="delCourse(${course.id})" class="btn bg-olive btn-xs">删除</a>
                                         <a href="${pageContext.request.contextPath}/teacher/updateCourse?id=${course.id}" class="btn bg-olive btn-xs">修改</a>
-                                        <a href="${pageContext.request.contextPath}/teacher/student?id=${course.id}" class="btn bg-olive btn-xs">评分</a>
+                                        <a href="${pageContext.request.contextPath}/teacher/student?id=${course.id}" class="btn bg-olive btn-xs">学生信息</a>
                                     </td>
                                 </tr>
                             </c:forEach>

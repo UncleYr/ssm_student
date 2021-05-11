@@ -1,4 +1,4 @@
-<%--
+<%@ page import="java.util.HashSet" %><%--
   Created by IntelliJ IDEA.
   User: 15181
   Date: 2020/12/2
@@ -80,106 +80,13 @@
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
-        <section class="content"> <!-- .box-body -->
-            <div class="box box-primary">
-                <div class="box-header with-border">
-                    <h3 class="box-title">列表</h3>
-                </div>
 
-                <div class="box-body">
-
-                    <!-- 数据表格 -->
-                    <div class="table-box">
-
-                        <!--工具栏-->
-                        <div class="pull-left">
-                            <div class="form-group form-inline">
-                                <div class="btn-group">
-
-                                    <button type="button" class="btn btn-default"  >
-                                        <a href="${pageContext.request.contextPath}/admin/teacher/add">添加</a>
-                                        <%--<i class="fa fa-refresh"></i>--%>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="box-tools pull-right">
-                            <div class="has-feedback">
-                                <input type="text" class="form-control input-sm"
-                                       placeholder="搜索"> <span
-                                    class="glyphicon glyphicon-search form-control-feedback"></span>
-                            </div>
-                        </div>
-                        <!--工具栏/-->
-
-                        <!--数据列表-->
-                        <table id="dataList"
-                               class="table table-bordered table-striped table-hover dataTable">
-                            <thead>
-                            <tr>
-<%--                                <th class="sorting_asc">学号</th>--%>
-<%--                                <th class="sorting_desc">姓名</th>--%>
-                                <th class="sorting_desc sorting_desc_disabled">id</th>
-                                <th class="sorting_asc sorting_asc_disabled">姓名</th>
-                                <th class="sorting_desc sorting_desc_disabled">密码</th>
-                                <%-- <th class="sorting">具有角色</th>
-                                 <th class="sorting">操作</th>--%>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <c:forEach items="${requestScope.teachers.list}" var="teacher">
-                                <tr>
-
-                                    <td>${teacher.id}</td>
-                                    <td>${teacher.name}</td>
-                                    <td>${teacher.password}</td>
-
-                                        <%--  <td class="text-center">
-                                              <c:forEach items="${requestScope.courses}" var="course1">
-                                                  &nbsp;&nbsp;${course1.courseName}
-                                              </c:forEach>
-                                          </td>--%>
-                                    <td class="text-center">
-                                    <a href="${pageContext.request.contextPath}/#"  class="btn bg-olive btn-xs">修改</a>
-                                </td>
-                                    <td class="text-center">
-                                        <a onclick="delTeacher(${teacher.id})" class="btn bg-olive btn-xs">删除</a>
-                                    </td>
-                                </tr>
-                            </c:forEach>
-
-
-
-                            </tbody>
-
-                        </table>
-                        <!--数据列表/-->
-                        <div class="box-tools pull-right">
-                            <ul class="pagination">
-                                <li><a href="${pageContext.request.contextPath}/admin/teacher?page=${requestScope.teachers.pageNum-1}&size=${requestScope.teachers.pageSize}">首页</a></li>
-                                <li><a href="${pageContext.request.contextPath}/admin/teacher?page=1&size=${requestScope.teachers.pageSize}">上一页</a></li>
-                                <c:forEach begin="1" end="${requestScope.teachers.pages}" var="pageNum">
-                                    <li><a href="${pageContext.request.contextPath}/admin/teacher?page=${pageNum}&size=${requestScope.teachers.pageSize}">${pageNum}</a></li>
-                                </c:forEach>
-                                <li><a href="${pageContext.request.contextPath}/admin/teacher?page=${requestScope.teachers.pageNum+1}&size=${requestScope.teachers.pageSize}">下一页</a></li>
-                                <li><a href="${pageContext.request.contextPath}/admin/teacher?page=${requestScope.teachers.pages}&size=${requestScope.teachers.pageSize}">尾页</a></li>
-                            </ul>
-
-                        </div>
-                    </div>
-                    <!-- 数据表格 /-->
-
-                </div>
-                <!-- /.box-body -->
-
-            </div>
-
-        </section>
-
+                <%
+//            HashSet sessions=(HashSet)application.getAttribute("sessions");
+//            out.print(sessions.size());
+        %>
 
     </div>
-
-
     <!-- 内容区域 /-->
 
     <!-- 底部导航 -->
@@ -189,18 +96,12 @@
         </div>
         <strong>Copyright &copy; 2014-2017 <a
                 href="https://www.nsu.edu.cn/">东软首页</a>.
-        </strong> All rights reserved. </footer>
+        </strong> All rights reserved.
+    </footer>
     <!-- 底部导航 /-->
 
 </div>
 
-<script>
-    function delTeacher(teacherId){
-        if(confirm("您确认要删除吗")){
-            location.href="${pageContext.request.contextPath}/admin/teacher/delete?id="+teacherId;
-        }
-    }
-</script>
 <script
         src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script
@@ -284,7 +185,7 @@
         src="${pageContext.request.contextPath}/plugins/ionslider/ion.rangeSlider.min.js"></script>
 <script
         src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
-<script>
+<%--<script>
     $(document).ready(function() {
         // 选择框
         $(".select2").select2();
@@ -313,7 +214,7 @@
         // 激活导航位置
         setSidebarActive("admin-index");
     });
-</script>
+</script>--%>
 </body>
 
 </html>

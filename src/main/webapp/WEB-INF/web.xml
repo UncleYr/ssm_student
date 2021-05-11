@@ -23,6 +23,16 @@
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
   </listener>
+
+  <!--在web.xml中分别配置SessionListener和session超时时间（10分钟）：-->
+  <listener>
+    <listener-class>cn.uncleyang.controller.AdminController</listener-class>
+  </listener>
+  <session-config>
+    <session-timeout>10</session-timeout>
+  </session-config>
+
+
   <!--全局的初始化参数-->
   <context-param>
     <param-name>contextConfigLocation</param-name>

@@ -24,7 +24,7 @@
 	href="${pageContext.request.contextPath}/plugins/iCheck/square/blue.css">
 </head>
 
-<body class="hold-transition login-page">
+<body  background="${pageContext.request.contextPath}/img/p1.jpg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;" >
 	<div class="login-box">
 		<div class="login-logo">
 			<a href="all-admin-index.html"><b>成都东软</b>管理员管理系统</a>
@@ -46,12 +46,6 @@
 						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
-					<div class="col-xs-8">
-						<div class="checkbox icheck">
-							<label><input type="checkbox"> 记住 下次自动登录</label>
-						</div>
-					</div>
-					<!-- /.col -->
 					<div class="col-xs-4">
 						<button type="submit" class="btn btn-primary btn-block btn-flat">登录</button>
 					</div>

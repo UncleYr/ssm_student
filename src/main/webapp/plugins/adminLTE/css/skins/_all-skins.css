@@ -59,7 +59,7 @@
 .skin-blue .wrapper,
 .skin-blue .main-sidebar,
 .skin-blue .left-side {
-  background-color: #222d32;
+  background-color: #5a758b;
 }
 .skin-blue .user-panel > .info,
 .skin-blue .user-panel > .info > a {
@@ -374,7 +374,6 @@
 }
 .skin-black .main-header li.user-header {
   background-color: #222;
-}
 .skin-black .content-header {
   background: transparent;
   box-shadow: none;

@@ -7,6 +7,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -116,9 +117,6 @@
                                class="table table-bordered table-striped table-hover dataTable">
                             <thead>
                             <tr>
-                                <th class="" style="padding-right: 0px"><input
-                                        id="selall" type="checkbox" class="icheckbox_square-blue">
-                                </th>
                                 <th class="sorting_asc">课程名</th>
                                 <th class="sorting_desc">授课老师</th>
                                 <th class="sorting_asc sorting_asc_disabled">时间</th>
@@ -132,10 +130,9 @@
                             <tbody>
                             <c:forEach items="${requestScope.courses}" var="course">
                                 <tr>
-                                    <td><input name="ids" type="checkbox"></td>
                                     <td>${course.courseName}</td>
                                     <td>${course.teacher}</td>
-                                    <td>${course.time}</td>
+                                    <td><fmt:formatDate value="${course.time}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
                                     <td>${course.place}</td>
                                     <td>${course.count}</td>
                                     <td>${course.remainCount}</td>
@@ -145,13 +142,13 @@
                                               </c:forEach>
                                           </td>--%>
                                     <td class="text-center">
-                                    <a href="${pageContext.request.contextPath}/#"  class="btn bg-olive btn-xs">修改</a>
+                                    <a href="${pageContext.request.contextPath}/admin/course/update?id=${course.id}"  class="btn bg-olive btn-xs">修改</a>
                                 </td>
                                     <%--<td class="text-center">
                                         <a href="${pageContext.request.contextPath}/#"  class="btn bg-olive btn-xs">课程</a>
                                     </td>--%>
                                     <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/admin/student/delete?id=${user.id}"  class="btn bg-olive btn-xs">删除</a>
+                                        <a  onclick="deleteCourse(${course.id})"  class="btn bg-olive btn-xs">删除</a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -201,7 +198,13 @@
     <!-- 底部导航 /-->
 
 </div>
-
+<script>
+    function deleteCourse(courseId){
+        if(confirm("您确认要删除吗")){
+            location.href="${pageContext.request.contextPath}/admin/course/delete?id="+courseId;
+        }
+    }
+</script>
 <script
         src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script

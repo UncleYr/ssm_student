@@ -9,13 +9,12 @@
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
     <!-- 页面meta -->
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
     <title>课程管理</title>
     <meta name="description" content="AdminLTE2定制版">
     <meta name="keywords" content="AdminLTE2定制版">
@@ -69,9 +68,15 @@
           href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
 
     <script>
-        function delCourse(){
+        function delCourse(id){
             if(confirm("您确认要删除吗")){
-                return true;
+                location.href="${pageContext.request.contextPath}/teacher/deleteStudent?uid="+id;
+            }
+        };
+        function addStudent(courseId){
+            let id = prompt("输入学号：");
+            if (id!=null){
+                location.href="${pageContext.request.contextPath}/teacher/addStudent?cid="+courseId+"&uid="+id;
             }
         }
     </script>
@@ -83,7 +88,7 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="admin-header.jsp"></jsp:include>
+    <jsp:include page="teacher-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
@@ -102,9 +107,9 @@
                 <li><a href="${pageContext.request.contextPath}/pages/teacherMain.jsp"><i
                         class="fa fa-dashboard"></i> 首页</a></li>
                 <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">课程管理</a></li>
+                        href="${pageContext.request.contextPath}/teacher/showCourse">查看已开设课程</a></li>
 
-                <li class="active">课程</li>
+                <li class="active">学生信息</li>
             </ol>
         </section>
         <!-- 内容头部 /-->
@@ -125,20 +130,21 @@
                         <div class="pull-left">
                             <div class="form-group form-inline">
                                 <div class="btn-group">
-                                    <button type="button" class="btn btn-default" title="新建" onclick="location.href='${pageContext.request.contextPath}/teacher/addCourse'">
+                                    <button type="button" class="btn btn-default" title="新建" onclick="addStudent(${requestScope.cid})">
                                         <i class="fa fa-file-o"></i> 添加
                                     </button>
+                                    <button id="js-export" class="btn btn-default" type="button" >导出Excel</button>
 
                                 </div>
                             </div>
                         </div>
-                        <div class="box-tools pull-right">
+                     <%--   <div class="box-tools pull-right">
                             <div class="has-feedback">
-                                <input type="text" class="form-control input-sm"
+                                <input type="text" class="form-control input-sm" id="findStudentByIdOrName"
                                        placeholder="搜索"> <span
                                     class="glyphicon glyphicon-search form-control-feedback"></span>
                             </div>
-                        </div>
+                        </div>--%>
                         <!--工具栏/-->
 
                         <!--数据列表-->
@@ -149,17 +155,17 @@
                                 <th class="" style="padding-right: 0px"><input
                                         id="selall" type="checkbox" class="icheckbox_square-blue">
                                 </th>
-                                <th class="sorting_asc">学号</th>
-                                <th class="sorting_desc">姓名</th>
-                                <th class="sorting_asc sorting_asc_disabled">专业</th>
-                                <th class="sorting_desc sorting_desc_disabled">年纪</th>
-                                <th class="sorting_desc sorting_desc_disabled">分数</th>
+                                <th class="sorting_asc1"><label class = "sortById" id="sortById" >学号</label></th>
+                                <th class="sorting_desc1">姓名</th>
+                                <th >专业</th>
+                                <th >年纪</th>
+                                <th class="sorting_desc" id="sortByScore"><label class="sortByScore" id="sortByScoreValue" >分数</label></th>
 
-                                <th class="sorting">操作</th>
+                                <th >操作</th>
                             </tr>
                             </thead>
 
-                            <tbody>
+                            <tbody id="content">
                             <c:forEach items="${requestScope.users}" var="user">
                                 <tr>
                                     <td><input name="ids" type="checkbox"></td>
@@ -174,14 +180,10 @@
                                         </c:forEach>
                                     </td>--%>
                                     <td class="text-center">
-                                        <a href="${pageContext.request.contextPath}/teacher/deleteStudent?id=${user.id}" onclick="delCourse()" class="btn bg-olive btn-xs">删除</a>
-                                        <a href="${pageContext.request.contextPath}/teacher/updateStudent?id=${user.id}" class="btn bg-olive btn-xs">修改</a>
-                                        <a href="#" class="btn bg-olive btn-xs"  id="score">打分</a>
+                                        <a  onclick="delCourse(${user.id})" class="btn bg-olive btn-xs">删除</a>
+                                        <a href="#" class="btn bg-olive btn-xs" onclick="showDetail(${user.id},${requestScope.cid},${user.score})" id="score">打分或修改分数</a>
                                     </td>
-
-
                                 </tr>
-
                             </c:forEach>
 
 
@@ -212,15 +214,15 @@
                             <table style="border-collapse:separate; border-spacing:20px; font-family: 'youyuan">
                                 <tr>
                                     <td >学号:</td>
-                                    <td><input type="text" name="uid" value="" style="width: 300px;height: 30px;outline: none;"></td>
+                                    <td><input type="text" id="user_id" name="uid" value="" style="width: 300px;height: 30px;outline: none;"></td>
                                 </tr>
                                 <tr>
                                     <td>课程编号:</td>
-                                    <td><input type="hidden" name="cid" value="" style="width: 300px;height: 30px;outline: none" ></td>
+                                    <td><input id="course_id" type="text" readonly="true" name="cid" value="" style="width: 300px;height: 30px;outline: none" ></td>
                                 </tr>
                                 <tr>
                                     <td>分数:</td>
-                                    <td><input type="text" name="score" style="width: 300px;height: 30px;outline: none"></td>
+                                    <td><input id="course_score" type="text" name="score" style="width: 300px;height: 30px;outline: none"></td>
                                 </tr>
                             </table>
                             <div style="margin-top:20px;position: relative;left:103px;"><input type="submit" style="width: 80px;height: 30px;outline: none" value="确定"></div>
@@ -248,9 +250,6 @@
     <!-- 底部导航 /-->
 
 </div>
-
-
-
 
 
 
@@ -302,19 +301,123 @@
 <script src="../plugins/flot/jquery.flot.categories.min.js"></script>
 <script src="../plugins/ionslider/ion.rangeSlider.min.js"></script>
 <script src="../plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<%--分数降序排序--%>
+<script>
+    $(document).ready(function () {
+        let a = document.getElementById("sortByScoreValue");
+        let b = document.getElementById("sortByScore");
+        b.onclick = function () {
+            //获取数据
+            $.ajax({
+                url: "${pageContext.request.contextPath}/teacher/student/order",
+                data: {"value": a.innerHTML},
+                success: function (data) {
+                    var html = "";
+                    for (let i = 0; i < data.length; i++) {
+                        html += "<tr>" +
+                            "<td>" + "<input name='ids' type='checkbox'>" + "</td>" +
+                            "<td>" + data[i].id + "</td>" +
+                            "<td>" + data[i].username + "</td>" +
+                            "<td>" + data[i].major + "</td>" +
+                            "<td>" + data[i].grade + "</td>" +
+                            "<td>" + data[i].score + "</td>" +
+
+                            "<td class='text-center'>" +
+                            "<a class='btn bg-olive btn-xs' href="+"${pageContext.request.contextPath}/teacher/student/" + data[i].id+">"
+                            + "删除" +  "</a>"+ "</td>" +
+                            "<td class='text-center'>" +
+                            "<a class='btn bg-olive btn-xs' href="+"${pageContext.request.contextPath}/teacher/student/saveScore" +">"
+                            + "打分或修改分数" +  "</a>"+ "</td>" +
+                            "</tr>"
+                    }
+
+                    $("#content").html(html);
+                }
+            });
+        };
+
+
+        // 选择框
+        $(".select2").select2();
+
+        // WYSIHTML5编辑器
+        $(".textarea").wysihtml5({
+            locale: 'zh-CN'
+        });
+
+        function delUser() {
+            if (confirm("您确定要删除吗？")) {
+                return true;
+            }
+        }
+    });
+
+    // 设置激活菜单
+    function setSidebarActive(tagUri) {
+        var liObj = $("#" + tagUri);
+        if (liObj.length > 0) {
+            liObj.parent().parent().addClass("active");
+            liObj.addClass("active");
+        }
+    }
+
+    $(document).ready(function () {
+        // 激活导航位置
+        setSidebarActive("admin-index");
+    });
+</script>
+
+<script>
+    //导出成绩
+    $('#js-export').click(function(){
+
+        window.location.href="${pageContext.request.contextPath}/teacher/exportStudents";
+    });
+</script>
 <script>
 
-    $("#score").click(function () {
+    function showDetail(userid,cid,score) {
+        $("#user_id").val(userid);
+        $("#course_score").val(score);
+        $("#course_id").val(cid);
         $("#updateScore").css("display", "block")
-    });
-    $(document).ready(function() {
+    }
+   /* $(document).ready(function() {
+
+        let a = document.getElementById("findStudentByIdOrName");
+
+        }*/
+
+        a.onblur = function () {
+            //获取数据
+            $.ajax({
+                url: "${pageContext.request.contextPath}/teacher/findStudentByIdOrName",
+                data: {"value": a.value},
+                success: function (data) {
+                    //console.log(a.value)
+                    var html = "";
+                    for (let i = 0; i < data.length; i++) {
+                        html += "<tr>" +
+                            //<td><input name="ids" type="checkbox"></td>
+                            "<td>" + "<input name='ids' type='checkbox'>" + "</td>" +
+                            "<td>" + data[i].id + "</td>" +
+                            "<td>" + data[i].username + "</td>" +
+                            "<td>" + data[i].major + "</td>" +
+                            "<td>" + data[i].grade + "</td>" +
+                            "<td>" + data[i].score + "</td>" +
+                            "</tr>"
+                    }
+                    $("#content").html(html);
+                }
+            });
+        };
         // 选择框
         $(".select2").select2();
 
         // WYSIHTML5编辑器
         $(".textarea").wysihtml5({
             locale : 'zh-CN'
-        });
+
     });
 
     // 设置激活菜单

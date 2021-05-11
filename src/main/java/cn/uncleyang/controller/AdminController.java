@@ -8,6 +8,7 @@ import cn.uncleyang.service.AdminService;
 import cn.uncleyang.service.CourseService;
 import cn.uncleyang.service.TeacherService;
 import cn.uncleyang.service.UserService;
+import cn.uncleyang.tuils.OnlineCounter;
 import com.github.pagehelper.PageInfo;
 import org.apache.ibatis.annotations.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,9 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -29,7 +33,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/admin")
-public class AdminController {
+public class AdminController implements HttpSessionListener {
     @Autowired   //Field injection is not recommended
     private AdminService adminService;
 
@@ -54,14 +58,24 @@ public class AdminController {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         Admin admin = adminService.findAdminByIdAndPassword(username, password);
-        if (admin != null) {
 
+        int onlineCount = OnlineCounter.getOnlineCount();
+        //request.setAttribute("onlineCount",onlineCount);
+        request.getSession().setAttribute("onlineCount",onlineCount);
+        if (admin != null) {
+            request.getSession().setAttribute("admin",admin);
             return "adminMain";
         } else {
             request.setAttribute("msg", "用户名密码不正确");
             //modelAndView.addObject("msg","用户名密码不正确");
             return "adminLogin";
         }
+    }
+
+    @RequestMapping("/logout")
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+        request.getRequestDispatcher("/index.jsp").forward(request,response);
     }
 
     /**
@@ -112,7 +126,7 @@ public class AdminController {
         String id = request.getParameter("id");
         Integer tid = Integer.valueOf(id);
         teacherService.delete(tid);
-        return null;
+        return "adminShowTeachers";
     }
 
     /**
@@ -123,7 +137,7 @@ public class AdminController {
     @RequestMapping("/teacher/update")
     public String teacherUpdate() {
 
-        return null;
+        return "adminShowTeachers";
     }
 
 
@@ -160,19 +174,26 @@ public class AdminController {
         Integer cid = Integer.valueOf(id);
         courseService.delete(cid);
 
-        return null;
+        return "forward:/admin/course";
     }
-
     /**
      * 课程的修改：信息出错，课上一半换老师了？
      * @return
      */
     @RequestMapping("/course/update")
-    public String courseUpdate(Course course){
-
+    public String courseUpdate(Integer id,HttpServletRequest request){
+        Course course = courseService.findById(id);
+        request.setAttribute("course",course);
+        return "admin-updateCourse";
+    }
+    /**
+     * 课程的修改：信息出错，课上一半换老师了？
+     * @return
+     */
+    @RequestMapping("/course/updateSave")
+    public String courseUpdateSave(Course course){
         courseService.updateCourse(course);
-
-        return null;
+        return "forward:/admin/course";
     }
 
     /**
@@ -211,7 +232,7 @@ public class AdminController {
     public String studentDelete(HttpServletRequest request){
         String id = request.getParameter("id");
         userService.deleteUserById(id);
-        return "adminShowStudents";
+        return "forward:/admin/student";
     }
 
     /**
@@ -250,10 +271,46 @@ public class AdminController {
     }
     @ResponseBody
     @RequestMapping("/student/searchStudent")
-    public List<User> searchStudents(String value, HttpServletRequest request, HttpServletResponse response) throws IOException {
-//        List<User> users = adminService.findUserByCondition(value);
-//        return users;
+    public List<User> searchStudents(String value){
+
         return adminService.findUserByCondition(value);
 
     }
+
+    @RequestMapping("/log")
+    public String checkLog(String id,HttpServletRequest request){
+        int onlineCount = OnlineCounter.getOnlineCount();
+        request.setAttribute("onlineCount",onlineCount);
+        return "syslog-list";
+    }
+
+    @Override
+    public void sessionCreated(HttpSessionEvent event) {
+        HttpSession session = event.getSession();
+        ServletContext application = session.getServletContext();
+
+        // 在application范围由一个HashSet集保存所有的session
+        HashSet sessions = (HashSet) application.getAttribute("sessions");
+        if (sessions == null) {
+            sessions = new HashSet();
+            application.setAttribute("sessions", sessions);
+        }
+
+        // 新创建的session均添加到HashSet集中
+        sessions.add(session);
+        // 可以在别处从application范围中取出sessions集合
+
+        // 然后使用sessions.size()获取当前活动的session数，即为“在线人数”
+    }
+
+    @Override
+    public void sessionDestroyed(HttpSessionEvent event) {
+        HttpSession session = event.getSession();
+        ServletContext application = session.getServletContext();
+        HashSet sessions = (HashSet) application.getAttribute("sessions");
+
+        // 销毁的session均从HashSet集中移除
+        sessions.remove(session);
+    }
+
 }

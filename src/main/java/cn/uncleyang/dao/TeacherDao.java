@@ -68,7 +68,7 @@ public interface TeacherDao {
      * @param cid
      * @return
      */
- @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} ")
+ @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} order By u.`id`")
     List<User> findStudentByCourseId(@Param("cid") Integer cid);
 
     /**
@@ -79,4 +79,62 @@ public interface TeacherDao {
  //@Insert("insert into score values(#{score.uid},#{score.cid},#{score.score})")
     @Update("update score set score=#{score.score} where uid=#{score.uid} and cid=#{score.cid}")
     int saveScore(@Param("score") Score score);
+
+    /**
+     * 删除中间表
+     * @param uid
+     * @param cid
+     */
+    @Delete("delete from user_course where uid=#{uid} and cid=#{cid}")
+    void deleteStudent(@Param("uid") String uid, @Param("cid") int cid);
+
+    /**
+     * 删除分数表
+     * @param uid
+     * @param cid
+     */
+    @Delete("delete from score where uid=#{uid} and cid=#{cid}")
+    void deleteStudentFromScore(@Param("uid")String uid,  @Param("cid")int cid);
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    List<User> findStudentByIdOrName(String value);
+
+    /**
+     * 按分数排序默认升序
+     * @param cid
+     * @return
+     */
+    @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} ORDER BY s.`score` ASC ")
+    List<User> findStudentByCourseIdSortScore(@Param("cid") Integer cid);
+
+    /**
+     * 按分数降序
+     * @param cid
+     * @return
+     */
+    @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} ORDER BY s.`score` Desc ")
+    List<User> findStudentByCourseIdSortScoreDesc(@Param("cid") Integer cid);
+
+    /**
+     * 按学号排序默认升序
+     * @param cid
+     * @return
+     */
+    @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} ORDER BY u.`id` ASC ")
+    List<User> findStudentByCourseIdSortId(@Param("cid") Integer cid);
+
+    /**
+     * 按学号降序
+     * @param cid
+     * @return
+     */
+    @Select("select u.*,c.`coursename`,s.`score` from user u,course c,score s where u.`id`=s.`uid` and c.`id`=s.`cid` and c.`id`=#{cid} ORDER BY u.`id` Desc ")
+    List<User> findStudentByCourseIdSortIdDesc(@Param("cid") Integer cid);
+
+    @Select("select * from course where id =#{id}")
+    Course findCourseByCourseId(int id);
 }

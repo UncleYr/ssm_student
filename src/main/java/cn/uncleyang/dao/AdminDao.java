@@ -30,6 +30,5 @@ public interface AdminDao {
      * @param values
      * @return
      */
-    //List<User> findUserByCondition(@Param("id") String id,@Param("username") String username);
     List<User> findUserByCondition(@Param("values") String values);
 }

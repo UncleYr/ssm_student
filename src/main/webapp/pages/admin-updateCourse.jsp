@@ -68,7 +68,7 @@
 	<div class="wrapper">
 
 		<!-- 页面头部 -->
-		<jsp:include page="teacher-header.jsp"></jsp:include>
+		<jsp:include page="admin-header.jsp"></jsp:include>
 		<!-- 页面头部 /-->
 		<!-- 导航侧栏 -->
 		<jsp:include page="teacher-aside.jsp"></jsp:include>
@@ -80,19 +80,19 @@
 			<!-- 内容头部 -->
 			<section class="content-header">
 			<h1>
-				课程管理 <small>添加课程</small>
+				课程管理 <small>修改课程</small>
 			</h1>
 			<ol class="breadcrumb">
 				<li><a href="${pageContext.request.contextPath}/index.jsp"><i
 						class="fa fa-dashboard"></i> 首页</a></li>
 				<li><a
 					href="${pageContext.request.contextPath}/user/findAll.do">课程管理</a></li>
-				<li class="active">添加课程</li>
+				<li class="active">修改课程</li>
 			</ol>
 			</section>
 			<!-- 内容头部 /-->
 
-			<form action="${pageContext.request.contextPath}/teacher/saveCourse"
+			<form action="${pageContext.request.contextPath}/admin/course/updateSave"
 				method="post">
 				<!-- 正文区域 -->
 				<section class="content"> <!--产品信息-->
@@ -104,27 +104,27 @@
 						<div class="col-md-2 title">课程名</div>
 						<div class="col-md-4 data">
 							<input type="text" class="form-control" name="courseName"
-								placeholder="" value="">
+								placeholder="" value="${requestScope.course.courseName}">
 						</div>
 						<div class="col-md-2 title">授课老师</div>
 						<div class="col-md-4 data">
 							<input type="text" class="form-control" name="teacher"
-								placeholder="" value="${sessionScope.teacher.name}" readonly="readonly">
+								placeholder="" value="${sessionScope.teacher.name}">
 						</div>
 						<div class="col-md-2 title">时间</div>
 						<div class="col-md-4 data">
-							<input type="text" class="form-control" name="time" id="timeFormat"
-								   placeholder="yyyy-MM-dd HH:mm:ss" value="">
+							<input type="text" class="form-control" name="time"
+								   placeholder="yyyy-MM-dd HH:mm:ss" value="${requestScope.course.time}">
 						</div>
 						<div class="col-md-2 title">地点</div>
 						<div class="col-md-4 data">
 							<input type="text" class="form-control" name="place"
-								   placeholder="" value="">
+								   placeholder="" value="${requestScope.course.place}">
 						</div>
 						<div class="col-md-2 title">人数</div>
 						<div class="col-md-4 data">
 							<input type="text" class="form-control" name="count"
-								   placeholder="" value="">
+								   placeholder="" value="${requestScope.course.count}">
 						</div>
 
 					<%--	<div class="col-md-2 title">用户角色</div>
@@ -153,21 +153,14 @@
 		<div class="pull-right hidden-xs">
 			<b>Version</b> 1.0.8
 		</div>
-		<strong>Copyright &copy; 2020 <a
-			href="http://www.itcast.cn">东软首页</a>.
+		<strong>Copyright &copy; 2014-2017 <a
+			href="http://www.itcast.cn">研究院研发部</a>.
 		</strong> All rights reserved. </footer>
 		<!-- 底部导航 /-->
 
 	</div>
 
-	<script>
-		$("#timeFormat").onclick(function () {
-			$("input[name='time']").datepicker({
-				dateFormat:"yyyy-MM-dd HH:mm:ss"
-			});
 
-		})
-	</script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
 	<script
@@ -274,5 +267,8 @@
 			}
 		}
 	</script>
+
+
 </body>
+
 </html>

@@ -71,7 +71,7 @@
 <div class="wrapper">
 
     <!-- 页面头部 -->
-    <jsp:include page="admin-header.jsp"></jsp:include>
+    <jsp:include page="teacher-header.jsp"></jsp:include>
     <!-- 页面头部 /-->
 
     <!-- 导航侧栏 -->
@@ -80,7 +80,7 @@
 
     <!-- 内容区域 -->
     <div class="content-wrapper">
-
+        <img src="${pageContext.request.contextPath}/img/p2.jpg" width="1300px">
     </div>
     <!-- 内容区域 /-->
 

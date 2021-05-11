@@ -43,4 +43,25 @@
         </property>
     </bean>-->
 
+<!--配置拦截请求-->
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/user/**"/>
+            <mvc:exclude-mapping path="/user/findUserByIdAndPassword"/>
+            <bean class="cn.uncleyang.intercepter.UserInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/teacher/**"/>
+            <mvc:exclude-mapping path="/teacher/findTeacherByIdAndPassword"/>
+            <bean class="cn.uncleyang.intercepter.TeacherInterceptor"/>
+        </mvc:interceptor>
+
+        <mvc:interceptor>
+            <mvc:mapping path="/admin/**"/>
+            <mvc:exclude-mapping path="/admin/findAdminByIdAndPassword"/>
+            <bean class="cn.uncleyang.intercepter.AdminInterceptor"/>
+        </mvc:interceptor>
+    </mvc:interceptors>
+
 </beans>

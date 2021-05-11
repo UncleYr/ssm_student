@@ -1,11 +1,29 @@
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-
+	<%
+		String path = request.getContextPath();
+		String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+		String password1="";
+		String id="";
+		String checked="";
+		Cookie[] cookies = request.getCookies();        //取出cookie对象组
+		for(int i = 0; cookies != null && i < cookies.length;i++){
+			Cookie cookie = cookies[i];       //  取出其中的一个对象，含有name ,value
+			if(cookie != null && "id".equals(cookie.getName())){      //获取第一个cookie对象的name
+				id = URLDecoder.decode(cookie.getValue(), "UTF-8");//进行解码
+				checked = "checked";
+			}
+			if(cookie != null && "password1".equals(cookie.getName())){
+				password1 = cookie.getValue();
+			}
+		}
+	%>
 <title>学生登陆</title>
 
 <meta
@@ -24,7 +42,8 @@
 	href="${pageContext.request.contextPath}/plugins/iCheck/square/blue.css">
 </head>
 
-<body class="hold-transition login-page">
+<body background="${pageContext.request.contextPath}/img/p1.jpg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;" >
+
 	<div class="login-box">
 		<div class="login-logo">
 			<a href="all-admin-index.html"><b>成都东软</b>学生在线选课系统</a>
@@ -39,19 +58,19 @@
 			<form action="${pageContext.request.contextPath}/user/findUserByIdAndPassword"
 				method="post">
 				<div class="form-group has-feedback">
-					<input type="text" name="id" class="form-control"
-						placeholder="学号"> <span
+					<input type="text" name="id" class="form-control" value="<%=id%>"
+						placeholder="学号" > <span
 						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" name="password" class="form-control"
+					<input type="password" name="password" class="form-control" value="<%=password1%>"
 						placeholder="密码"> <span
-						class="glyphicon glyphicon-lock form-control-feedback"></span>
+						class="glyphicon glyphicon-lock form-control-feedback" ></span>
 				</div>
 				<div class="row">
 					<div class="col-xs-8">
 						<div class="checkbox icheck">
-							<label><input type="checkbox"> 记住 </label>
+							<label><input type="checkbox" name="remember"  value="yes" <%=checked%>> 记住 </label>
 						</div>
 					</div>
 					<!-- /.col -->
@@ -61,13 +80,13 @@
 					<!-- /.col -->
 				</div>
 			</form>
-			<a href="adminLogin.jsp">
+			<a href="${pageContext.request.contextPath}/pages/adminLogin.jsp">
 				<input type="button" value="管理员登陆"/>
 			</a>
-			<a href="teacherLogin.jsp">
+			<a href="${pageContext.request.contextPath}/pages/teacherLogin.jsp">
 				<input type="button" value="老师登陆"/>
 			</a><br>
-			<a href="#">忘记密码</a>
+			<a onclick="ForgetPassword()">忘记密码</a>
 
 
 
@@ -85,6 +104,11 @@
 		src="${pageContext.request.contextPath}/plugins/bootstrap/js/bootstrap.min.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/plugins/iCheck/icheck.min.js"></script>
+	<script>
+		function ForgetPassword(){
+			alert("请联系辅导员或者管理员!");
+		}
+	</script>
 	<script>
 		$(function() {
 			$('input').iCheck({

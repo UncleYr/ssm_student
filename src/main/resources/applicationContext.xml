@@ -21,12 +21,12 @@
     <!--Spring整合MyBatis框架-->
     <!--2、配置数据源对象-->
     <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">
-        <property name="driverClass" value="com.mysql.jdbc.Driver"/>
-        <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/stuCourseSys"/>
-        <property name="user" value="root"/>
-        <property name="password" value="root"/>
-    </bean>
 
+    <property name="driverClass" value="com.mysql.jdbc.Driver"/>
+    <property name="jdbcUrl" value="jdbc:mysql://localhost:3306/stuCourseSys"/>
+    <property name="user" value="root"/>
+    <property name="password" value="root"/>
+</bean>
     <!--配置SqlSessionFactory工厂-->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="dataSource" ref="dataSource" />

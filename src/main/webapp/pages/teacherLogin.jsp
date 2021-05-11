@@ -1,5 +1,6 @@
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+		 pageEncoding="UTF-8"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -23,8 +24,25 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/plugins/iCheck/square/blue.css">
 </head>
-
-<body class="hold-transition login-page">
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+	String password="";
+	String name="";
+	String checked="";
+	Cookie[] cookies = request.getCookies();        //取出cookie对象组
+	for(int i = 0; cookies != null && i < cookies.length;i++){
+		Cookie cookie = cookies[i];       //  取出其中的一个对象，含有name ,value
+		if(cookie != null && "name".equals(cookie.getName())){      //获取第一个cookie对象的name
+			name = URLDecoder.decode(cookie.getValue(), "UTF-8");//进行解码
+			checked = "checked";
+		}
+		if(cookie != null && "password".equals(cookie.getName())){
+			password = cookie.getValue();
+		}
+	}
+%>
+<body  background="${pageContext.request.contextPath}/img/p1.jpg" style=" background-repeat:no-repeat ;background-size:100% 100%; background-attachment: fixed;" >
 	<div class="login-box">
 		<div class="login-logo">
 			<a href="all-admin-index.html"><b>成都东软</b>学生在线选课系统</a>
@@ -36,19 +54,19 @@
 			<form action="${pageContext.request.contextPath}/teacher/findTeacherByIdAndPassword"
 				method="post">
 				<div class="form-group has-feedback">
-					<input type="text" name="name" class="form-control"
+					<input type="text" name="name" class="form-control" value="<%=name%>"
 						placeholder="姓名"> <span
 						class="glyphicon glyphicon-envelope form-control-feedback"></span>
 				</div>
 				<div class="form-group has-feedback">
-					<input type="password" name="password" class="form-control"
+					<input type="password" name="password" class="form-control" value="<%=password%>"
 						placeholder="密码"> <span
 						class="glyphicon glyphicon-lock form-control-feedback"></span>
 				</div>
 				<div class="row">
 					<div class="col-xs-8">
 						<div class="checkbox icheck">
-							<label><input type="checkbox"> 记住 </label>
+							<label><input type="checkbox" value="yes" <%=checked%> name="checked"> 记住 </label>
 						</div>
 					</div>
 					<!-- /.col -->

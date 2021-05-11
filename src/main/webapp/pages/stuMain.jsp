@@ -83,6 +83,7 @@
     <!-- 内容区域 -->
     <div class="content-wrapper">
         <h1>${empty requestScope.msg ? "选课成功！":requestScope.msg}</h1>
+
     </div>
     <!-- 内容区域 /-->
 

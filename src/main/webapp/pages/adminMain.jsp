@@ -93,7 +93,8 @@
         </div>
         <strong>Copyright &copy; 2014-2017 <a
                 href="https://www.nsu.edu.cn/">东软首页</a>.
-        </strong> All rights reserved. </footer>
+        </strong> All rights reserved.
+    </footer>
     <!-- 底部导航 /-->
 
 </div>

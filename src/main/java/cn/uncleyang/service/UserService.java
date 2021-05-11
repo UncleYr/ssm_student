@@ -38,7 +38,8 @@ public class UserService {
         return userDao.save(id,newpswd);
     }
 
-    public List<Course> showCourses() {
+    public List<Course> showCourses(int page, int size) {
+        PageHelper.startPage(page,size);
         return courseDao.findAllCourse();
     }
 
@@ -74,7 +75,9 @@ public class UserService {
 
     public void deleteUserById(String id) {
          userDao.deleteUserCourseByUid(id);
-        userDao.deleteUserById(id);
+         userDao.deleteScoreByUid(id);
+         userDao.deleteUserById(id);
+
     }
 
     public void updateUser(User user) {

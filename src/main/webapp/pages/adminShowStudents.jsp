@@ -106,7 +106,7 @@
                             <div class="has-feedback">
                                 <input type="text" class="form-control input-sm" id="searchStudent"
                                        placeholder="搜索"> <span
-                                    class="glyphicon glyphicon-search form-control-feedback"></span>
+                                    class="glyphicon glyphicon-search form-control-feedback" id="searchS"></span>
 
                             </div>
                         </div>
@@ -117,9 +117,6 @@
                                class="table table-bordered table-striped table-hover dataTable">
                             <thead>
                             <tr>
-                                <th class="" style="padding-right: 0px"><input
-                                        id="selall" type="checkbox" class="icheckbox_square-blue">
-                                </th>
                                 <th class="sorting_asc">学号</th>
                                 <th class="sorting_desc">姓名</th>
                                 <th class="sorting_asc sorting_asc_disabled">密码</th>
@@ -128,6 +125,7 @@
                                 <th class="sorting_desc sorting_desc_disabled">专业</th>
                                 <th class="sorting_desc sorting_desc_disabled">年纪</th>
                                 <th class="sorting_desc sorting_desc_disabled">电话</th>
+                                <th class="sorting_desc sorting_desc_disabled">操作</th>
                                 <%-- <th class="sorting">具有角色</th>
                                  <th class="sorting">操作</th>--%>
                             </tr>
@@ -135,7 +133,6 @@
                             <tbody id="content">
                             <c:forEach items="${requestScope.users.list}" var="user">
                                 <tr>
-                                    <td><input name="ids" type="checkbox"></td>
                                     <td>${user.id}</td>
                                     <td>${user.username}</td>
                                     <td>${user.password}</td>
@@ -158,9 +155,7 @@
                                            class="btn bg-olive btn-xs">课程</a>
                                     </td>
                                     <td class="text-center" >
-                                        <a href="${pageContext.request.contextPath}/admin/student/delete?id=${user.id}"
-                                           onclick="javascript:return delUser();"
-                                           class="btn bg-olive btn-xs">删除</a>
+                                        <a  onclick="deleteUser(${user.id})"  class="btn bg-olive btn-xs">删除</a>
                                     </td>
                                 </tr>
                             </c:forEach>
@@ -170,7 +165,28 @@
 
                         </table>
                         <!--数据列表/-->
+                        <div class="box-tools pull-right">
+                            <ul class="pagination">
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum-1}&size=${requestScope.users.pageSize}">首页</a>
+                                </li>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/admin/student?page=1&size=${requestScope.users.pageSize}">上一页</a>
+                                </li>
+                                <c:forEach begin="1" end="${requestScope.users.pages}" var="pageNum">
+                                    <li>
+                                        <a href="${pageContext.request.contextPath}/admin/student?page=${pageNum}&size=${requestScope.users.pageSize}">${pageNum}</a>
+                                    </li>
+                                </c:forEach>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum+1}&size=${requestScope.users.pageSize}">下一页</a>
+                                </li>
+                                <li>
+                                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pages}&size=${requestScope.users.pageSize}">尾页</a>
+                                </li>
+                            </ul>
 
+                        </div>
                     </div>
                     <!-- 数据表格 /-->
 
@@ -181,28 +197,7 @@
 
         </section>
 
-        <div class="box-tools pull-right">
-            <ul class="pagination">
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum-1}&size=${requestScope.users.pageSize}">首页</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/student?page=1&size=${requestScope.users.pageSize}">上一页</a>
-                </li>
-                <c:forEach begin="1" end="${requestScope.users.pages}" var="pageNum">
-                    <li>
-                        <a href="${pageContext.request.contextPath}/admin/student?page=${pageNum}&size=${requestScope.users.pageSize}">${pageNum}</a>
-                    </li>
-                </c:forEach>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pageNum+1}&size=${requestScope.users.pageSize}">下一页</a>
-                </li>
-                <li>
-                    <a href="${pageContext.request.contextPath}/admin/student?page=${requestScope.users.pages}&size=${requestScope.users.pageSize}">尾页</a>
-                </li>
-            </ul>
 
-        </div>
     </div>
 
 
@@ -220,7 +215,13 @@
     <!-- 底部导航 /-->
 
 </div>
-
+<script>
+    function deleteUser(userId){
+        if(confirm("您确认要删除吗")){
+            location.href="${pageContext.request.contextPath}/admin/student/delete?id="+userId;
+        }
+    }
+</script>
 <script
         src="${pageContext.request.contextPath}/plugins/jQuery/jquery-2.2.3.min.js"></script>
 <script
@@ -306,20 +307,20 @@
         src="${pageContext.request.contextPath}/plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <script>
     $(document).ready(function () {
-        let a = document.getElementById("searchStudent")
-        a.onblur = function () {
+        let a = document.getElementById("searchStudent");
+        let b = document.getElementById("searchS");
+        a.onkeyup   = function () {
             //获取数据
             $.ajax({
                 url: "${pageContext.request.contextPath}/admin/student/searchStudent",
                 data: {"value": a.value},
                 success: function (data) {
                     //console.log(a.value)
-                    console.log(data);
                     var html = "";
                     for (let i = 0; i < data.length; i++) {
                         html += "<tr>" +
                             //<td><input name="ids" type="checkbox"></td>
-                            "<td>" + "<input name='ids' type='checkbox'>" + "</td>" +
+
                             "<td>" + data[i].id + "</td>" +
                             "<td>" + data[i].username + "</td>" +
                             "<td>" + data[i].password + "</td>" +
@@ -328,6 +329,15 @@
                             "<td>" + data[i].major + "</td>" +
                             "<td>" + data[i].grade + "</td>" +
                             "<td>" + data[i].tel + "</td>" +
+                                "<td class='text-center'>" +
+                                    "<a class='btn bg-olive btn-xs' href="+"${pageContext.request.contextPath}/admin/student/updateR?id=" + data[i].id+">"
+                                    + "修改" +  "</a>"+ "</td>" +
+                            "<td class='text-center'>" +
+                            "<a class='btn bg-olive btn-xs' href="+"${pageContext.request.contextPath}/admin/student/course?id=" + data[i].id+">"
+                            + "课程" +  "</a>"+ "</td>" +
+                            "<td class='text-center'>" +
+                            "<a class='btn bg-olive btn-xs' href="+"${pageContext.request.contextPath}/admin/student/delete?id=" + data[i].id+">"
+                            + "删除" +  "</a>"+ "</td>" +
                             "</tr>"
                     }
                     $("#content").html(html);

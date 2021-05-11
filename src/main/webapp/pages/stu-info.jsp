@@ -86,11 +86,11 @@
         <!-- 内容头部 -->
         <section class="content-header">
             <h1>
-                个人信息 <small>${sessionScope.user.username}</small>
+                ${empty requestScope.msg?"个人信息":requestScope.msg} <small>${sessionScope.user.username}</small>
             </h1>
             <ol class="breadcrumb">
                 <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
+                        href="${pageContext.request.contextPath}/pages/stu-info.jsp">个人基本信息</a></li>
 
                 <li class="active">${sessionScope.user.username}</li>
             </ol>
@@ -123,10 +123,6 @@
                             <tr>
                                 <th class="sorting_desc">用户名</th>
                                 <td>${sessionScope.user.username}</td>
-                            </tr>
-                            <tr>
-                                <th class="sorting">登陆密码</th>
-                                <td>${sessionScope.user.password}</td>
                             </tr>
                             <tr>
                                 <th class="sorting_desc">性别</th>

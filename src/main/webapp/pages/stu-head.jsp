@@ -8,7 +8,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <header class="main-header">
     <!-- Logo -->
-    <a href="all-admin-index.html" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
+    <a href="${pageContext.request.contextPath}/pages/stu-info.jsp" class="logo"> <!-- mini logo for sidebar mini 50x50 pixels -->
         <span class="logo-mini"><b>学生</b></span> <!-- logo for regular state and mobile devices -->
         <span class="logo-lg"><b>学生</b>页面</span>
     </a>
@@ -90,3 +90,4 @@
         </div>
     </nav>
 </header>
+

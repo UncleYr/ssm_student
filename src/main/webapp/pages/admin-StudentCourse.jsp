@@ -8,6 +8,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -109,9 +110,6 @@
                                class="table table-bordered table-striped table-hover dataTable">
                             <thead>
                             <tr>
-                                <th class="" style="padding-right: 0px"><input
-                                        id="selall" type="checkbox" class="icheckbox_square-blue">
-                                </th>
 
                                 <th class="sorting_desc">课程名</th>
                                 <th class="sorting_asc sorting_asc_disabled">老师</th>
@@ -125,11 +123,10 @@
                             <tbody>
                             <c:forEach items="${requestScope.courses}" var="course">
                                 <tr>
-                                    <td><input name="ids" type="checkbox"></td>
 
                                     <td>${course.courseName}</td>
                                     <td>${course.teacher}</td>
-                                    <td>${course.time}</td>
+                                    <td><fmt:formatDate value="${course.time}" pattern="yyyy-MM-dd hh:mm:ss" /></td>
                                     <td>${course.place}</td>
 
                                   <%--  <td class="text-center">

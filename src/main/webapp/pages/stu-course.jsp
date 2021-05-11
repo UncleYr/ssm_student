@@ -68,6 +68,11 @@
     <link rel="stylesheet"
           href="${pageContext.request.contextPath}/plugins/bootstrap-slider/slider.css">
 
+    <script >
+        function refresh() {
+            location.href="${pageContext.request.contextPath}/user/showCourse";
+        }
+    </script>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -91,11 +96,8 @@
                 选课 <small>${sessionScope.user.username}</small>
             </h1>
             <ol class="breadcrumb">
-                <li><a href="${pageContext.request.contextPath}/pages/stuMain.jsp"><i
+                <li><a href="${pageContext.request.contextPath}/pages/stu-info.jsp"><i
                         class="fa fa-dashboard"></i> 首页</a></li>
-                <li><a
-                        href="${pageContext.request.contextPath}/user/findAll.do">用户管理</a></li>
-
                 <li class="active">${sessionScope.user.username}</li>
             </ol>
         </section>
@@ -118,18 +120,18 @@
                             <div class="form-group form-inline">
                                 <div class="btn-group">
 
-                                    <button type="button" class="btn btn-default" href="${pageContext.request.contextPath}/user/showCourse" title="刷新">
-                                        <i class="fa fa-refresh"></i> 刷新
+                                    <button type="button" class="btn btn-default" onclick=refresh() title="刷新">
+                                        <i class="fa fa-refresh" ></i> 刷新
                                     </button>
                                 </div>
                             </div>
                         </div>
-                        <div class="box-tools pull-right">
+                       <%-- <div class="box-tools pull-right">
                             <div class="has-feedback">
                                 <input type="text" class="form-control input-sm"
                                        placeholder="搜索" id="search"> <span class="glyphicon glyphicon-search form-control-feedback"></span>
                             </div>
-                        </div>
+                        </div>--%>
                         <!--工具栏/-->
 
                         <!--数据列表-->
@@ -137,9 +139,9 @@
                                class="table table-bordered table-striped table-hover dataTable">
                             <thead>
                             <tr>
-                                <th class="" style="padding-right: 0px"><input
+                                <%--<th class="" style="padding-right: 0px"><input
                                         id="selall" type="checkbox" class="icheckbox_square-blue">
-                                </th>
+                                </th>--%>
                                 <th class="sorting_asc">ID</th>
                                 <th class="sorting_desc">课程名</th>
                                 <th class="sorting_asc sorting_asc_disabled">老师</th>
@@ -152,9 +154,9 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <c:forEach items="${requestScope.courses}" var="course">
+                            <c:forEach items="${requestScope.courses.list}" var="course">
                                 <tr>
-                                    <td><input name="ids" type="checkbox"></td>
+                                   <%-- <td><input name="ids" type="checkbox"></td>--%>
                                     <td>${course.id}</td>
                                     <td>${course.courseName}</td>
                                     <td>${course.teacher}</td>
@@ -187,11 +189,33 @@
                 <!-- /.box-body -->
 
 
-
+                <ul class="pagination">
+                    <li>
+                        <a href="${pageContext.request.contextPath}/user/showCourse?page=${requestScope.courses.pageNum-1}&size=${requestScope.courses.pageSize}">首页</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/user/showCourse?page=1&size=${requestScope.courses.pageSize}">上一页</a>
+                    </li>
+                    <c:forEach begin="1" end="${requestScope.courses.pages}" var="pageNum">
+                        <li>
+                            <a href="${pageContext.request.contextPath}/user/showCourse?page=${pageNum}&size=${requestScope.courses.pageSize}">${pageNum}</a>
+                        </li>
+                    </c:forEach>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/user/showCourse?page=${requestScope.courses.pageNum+1}&size=${requestScope.courses.pageSize}">下一页</a>
+                    </li>
+                    <li>
+                        <a href="${pageContext.request.contextPath}/user/showCourse?page=${requestScope.courses.pages}&size=${requestScope.courses.pageSize}">尾页</a>
+                    </li>
+                </ul>
             </div>
 
         </section>
         <!-- 正文区域 /-->
+        <div class="box-tools pull-right">
+
+
+        </div>
 
     </div>
     <!-- @@close -->
@@ -202,7 +226,7 @@
         <div class="pull-right hidden-xs">
             <b>Version</b> 1.0.8
         </div>
-        <strong>Copyright &copy; 2018-2020 <a
+        <strong>Copyright &copy;2020
             <a href="https://www.nsu.edu.cn/" target="_blank">东软首页</a>.
         </strong> All rights reserved. </footer>
     <!-- 底部导航 /-->
@@ -259,6 +283,10 @@
 <script src="../plugins/bootstrap-slider/bootstrap-slider.js"></script>
 <script>
     $(document).ready(function() {
+
+        $("#updatePswdLink").click(function () {
+            $("#updatePswd").css("display", "block")
+        });
 
         //异步搜索
         $("#search").onchange(function () {

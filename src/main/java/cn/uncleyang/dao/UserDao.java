@@ -122,4 +122,11 @@ public interface UserDao {
      */
     @Select("select * from user where id=#{id}")
     User findUserById(@Param("id") String id);
+
+    /**
+     * 删除分数表中的分数
+     * @param id
+     */
+    @Select("delete from score where uid=#{id}")
+    void deleteScoreByUid(String id);
 }

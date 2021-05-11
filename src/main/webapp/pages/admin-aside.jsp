@@ -60,13 +60,22 @@
                         href="${pageContext.request.contextPath}/admin/student?page=1&size=4">
                     <i class="fa fa-circle-o"></i> 查看学生个人信息
                 </a></li>
+                </ul></li>
+
+            <li class="treeview"><a href="#"> <i class="fa fa-cube"></i>
+                <span>扩展功能</span> <span class="pull-right-container"> <i
+                        class="fa fa-angle-left pull-right"></i>
+				</span>
+            </a>
+                <ul class="treeview-menu">
+
                     <li><a
-                            href="${pageContext.request.contextPath}/pages/syslog-list.jsp"> <i
+                            href="${pageContext.request.contextPath}/admin/log"> <i
                             class="fa fa-circle-o"></i> 访问日志
                     </a></li>
                     <li><a
                             href="#">
-                        <i class="fa fa-circle-o"></i>扩展功能
+                        <i class="fa fa-circle-o"></i>其他
                     </a></li>
 
                 </ul></li>

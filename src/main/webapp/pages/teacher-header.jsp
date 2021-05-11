@@ -15,8 +15,6 @@
 			role="button"> <span class="sr-only">Toggle navigation</span>
 		</a>
 
-			当前在线人数：${sessionScope.onlineCount}
-
 		<div class="navbar-custom-menu">
 
 			<ul class="nav navbar-nav">
@@ -37,11 +35,9 @@
 
 						<!-- Menu Footer-->
 						<li class="user-footer">
-							<div class="pull-left">
-								<a href="#" class="btn btn-default btn-flat">修改密码</a>
-							</div>
+
 							<div class="pull-right">
-								<a href="${pageContext.request.contextPath}/admin/logout"
+								<a href="${pageContext.request.contextPath}/teacher/logout"
 									class="btn btn-default btn-flat">注销</a>
 							</div>
 						</li>

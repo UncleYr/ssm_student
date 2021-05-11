@@ -31,4 +31,10 @@ public class BoringTest {
         }
         System.out.println(arrayList.size());
     }
+    @Test
+    public void test2(){
+        System.out.println("5" + 2);
+
+
+    }
 }

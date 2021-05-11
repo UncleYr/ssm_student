@@ -4,15 +4,20 @@ import cn.uncleyang.domain.Course;
 import cn.uncleyang.domain.User;
 import cn.uncleyang.service.CourseService;
 import cn.uncleyang.service.UserService;
+import cn.uncleyang.tuils.OnlineCounter;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.*;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -30,11 +35,11 @@ public class UserController {
     /**
      * 个人信息
      * @param request
-     * @param modelAndView
+     * @param
      * @return
      */
     @RequestMapping("/findUserByIdAndPassword")
-    public String findUserByIdAndPassword(ModelAndView modelAndView,HttpServletRequest request){
+    public String findUserByIdAndPassword(HttpServletResponse response,HttpServletRequest request){
         /**
          * Model:模型 作用封装数据
          * View: 视图 作用展示数据
@@ -53,12 +58,29 @@ public class UserController {
 
         String id = request.getParameter("id");
         String password = request.getParameter("password");
+        String remember = request.getParameter("remember");
         User user = userService.findUserByIdAndPassword(id, password);
         if (user ==null){
             request.setAttribute("msg","学号或密码错误");
             return "stuLogin";
         }
+        OnlineCounter.addUser(user);
         request.getSession().setAttribute("user",user);
+        Cookie idCookie = new Cookie("id", id);
+        Cookie passwordCookie1 = new Cookie("password1", password);
+        //设置Cookie的有效路径
+        idCookie.setPath(request.getContextPath()+"/");
+        //设置Cookie的有效路径
+        passwordCookie1.setPath(request.getContextPath()+"/");
+        if(remember != null && "yes".equals(remember)){            //有记住我，就设置cookie的保存时间
+            idCookie.setMaxAge(7*24*60*60);
+            passwordCookie1.setMaxAge(7*24*60*60);
+        }else{                                                                                 //没有记住我，设置cookie的时间为0
+            idCookie.setMaxAge(0);
+            passwordCookie1.setMaxAge(0);
+        }
+        response.addCookie(idCookie);
+        response.addCookie(passwordCookie1);
         return "stu-info";
     }
 
@@ -68,6 +90,8 @@ public class UserController {
      */
     @RequestMapping("logout")
     public void logout(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
+        User user = (User) request.getSession().getAttribute("user");
+        OnlineCounter.logout(user);
         request.getSession().invalidate();
         request.getRequestDispatcher("/index.jsp").forward(request,response);
         //return "stuLogin";
@@ -90,6 +114,7 @@ public class UserController {
         else {
             String newpswd = request.getParameter("newpswd");
             userService.updatePassword(user.getId(),newpswd);
+            request.setAttribute("msg","密码修改成功");
             user.setPassword(newpswd);
         }
         if (user==null){
@@ -105,10 +130,10 @@ public class UserController {
      * @return
      */
     @RequestMapping("showCourse")
-    public String showCourse(HttpServletRequest request){
-        List<Course> courses = userService.showCourses();
-
-        request.setAttribute("courses",courses);
+    public String showCourse(HttpServletRequest request, @RequestParam(name="page",defaultValue = "1")int page, @RequestParam(name = "size",defaultValue ="10")int size){
+        List<Course> courses = userService.showCourses(page,size);
+        PageInfo pageInfo = new PageInfo(courses);
+        request.setAttribute("courses",pageInfo);
         return "stu-course";
     }
 
@@ -121,7 +146,7 @@ public class UserController {
         User user = (User) request.getSession().getAttribute("user");
          List<Course>courses=userService.findCourse(user.getId());
          request.setAttribute("courses",courses);
-        return "stu-showCourse";
+        return "stu-ShowCourse";
     }
 
     /**
